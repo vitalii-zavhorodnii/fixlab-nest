@@ -21,7 +21,7 @@ import { DtoValidationPipe } from 'pipes/dto-validation.pipe';
 import { fileStorageHelper } from 'helpers/file-storage.helper';
 import { CreateBrandDto } from './dto/create-brand.dto';
 
-import { ROUTES } from 'constants/routes';
+import { ROUTES, SERVE_FOLDER } from 'constants/routes';
 
 @Controller(ROUTES.brands)
 export class BrandsController {
@@ -52,7 +52,7 @@ export class BrandsController {
     @Body()
     dto: CreateBrandDto,
   ) {
-    const filePath = `/public/${ROUTES.brands}/${image.filename}`;
+    const filePath = `/${SERVE_FOLDER}/${ROUTES.brands}/${image.filename}`;
     const brand = await this.brandsService.create(dto, filePath);
 
     return brand;

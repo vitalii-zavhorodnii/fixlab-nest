@@ -6,7 +6,9 @@ import { GadgetsService } from './gadgets.service';
 import { Gadget } from './schemas/gadget.schema';
 import { CreateGadgetDto } from './dto/create-gadget.dto';
 
-@Controller('gadgets')
+import { ROUTES } from 'constants/routes';
+
+@Controller(ROUTES.gadgets)
 export class GadgetsController {
   constructor(private service: GadgetsService) {}
 

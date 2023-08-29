@@ -16,7 +16,7 @@ class Brand {
 
   @ApiProperty({ example: 'apple' })
   @Prop()
-  readonly url: string;
+  readonly slug: string;
 
   @ApiProperty({ example: true })
   @Prop()
