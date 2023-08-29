@@ -7,9 +7,21 @@ export class CreateBrandDto {
   })
   readonly title: string;
 
-  @ApiProperty({ 
+  @ApiProperty({
     example: 'We repair Apple gadgets',
     description: 'Brand description',
   })
   readonly description: string;
+
+  @ApiProperty({
+    example: 'xiaomi',
+    description: 'Brand URL',
+  })
+  readonly url: string;
+
+  @ApiProperty({
+    example: false,
+    description: 'If false, will not appear on client side lists',
+  })
+  readonly isActive: boolean;
 }

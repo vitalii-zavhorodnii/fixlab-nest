@@ -8,15 +8,19 @@ export type BrandDocument = HydratedDocument<Brand>;
 class Brand {
   @ApiProperty({ example: 'Apple' })
   @Prop()
-  title: string;
+  readonly title: string;
 
   @ApiProperty({ example: 'img dummy NOT USE IT' })
   @Prop()
-  picture?: string;
+  readonly image: string;
 
   @ApiProperty({ example: 'apple' })
   @Prop()
-  url: string;
+  readonly url: string;
+
+  @ApiProperty({ example: true })
+  @Prop()
+  readonly isActive: boolean;
 }
 
 const BrandSchema = SchemaFactory.createForClass(Brand);

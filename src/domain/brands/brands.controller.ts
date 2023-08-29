@@ -1,13 +1,31 @@
-import { Controller, Param, Get, Post, Delete } from '@nestjs/common';
+import {
+  Controller,
+  UsePipes,
+  Param,
+  UploadedFile,
+  Body,
+  Get,
+  Post,
+  Delete,
+  UseInterceptors,
+  ParseFilePipe,
+  FileTypeValidator,
+} from '@nestjs/common';
+import { Express } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 import { BrandsService } from './brands.service';
+import { DtoValidationPipe } from 'pipes/dto-validation.pipe';
 
+import { fileStorageHelper } from 'helpers/file-storage.helper';
 import { CreateBrandDto } from './dto/create-brand.dto';
 
-@Controller('brands')
+import { ROUTES } from 'constants/routes';
+
+@Controller(ROUTES.brands)
 export class BrandsController {
-  constructor(private brandsService: BrandsService) {}
+  constructor(private readonly brandsService: BrandsService) {}
 
   @Get('')
   public async getAllBrands() {
@@ -20,8 +38,22 @@ export class BrandsController {
   }
 
   @Post('')
-  public async createBrand(dto: CreateBrandDto) {
-    const brand = await this.brandsService.create(dto);
+  @UseInterceptors(
+    FileInterceptor('image', { storage: fileStorageHelper(ROUTES.brands) }),
+  )
+  @UsePipes(DtoValidationPipe)
+  public async createBrand(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [new FileTypeValidator({ fileType: '.(svg|SVG)' })],
+      }),
+    )
+    image: Express.Multer.File,
+    @Body()
+    dto: CreateBrandDto,
+  ) {
+    const filePath = `/public/${ROUTES.brands}/${image.filename}`;
+    const brand = await this.brandsService.create(dto, filePath);
 
     return brand;
   }

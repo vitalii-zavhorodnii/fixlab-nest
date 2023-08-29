@@ -27,8 +27,8 @@ export class BrandsService {
     return brand;
   }
 
-  public async create(dto: CreateBrandDto): Promise<Brand> {
-    const brand = await new this.brandModel(dto);
+  public async create(dto: CreateBrandDto, image: string): Promise<Brand> {
+    const brand = await new this.brandModel({ ...dto, image });
 
     return brand.save();
   }
