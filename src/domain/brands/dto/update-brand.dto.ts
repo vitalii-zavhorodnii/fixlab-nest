@@ -34,9 +34,9 @@ export class UpdateBrandDto {
     required: true,
   })
   readonly metadata?: {
-    seo_title: string;
-    seo_description: string;
-    seo_keywords: string;
+    seo_title?: string;
+    seo_description?: string;
+    seo_keywords?: string;
   };
 
   readonly icon?: string;

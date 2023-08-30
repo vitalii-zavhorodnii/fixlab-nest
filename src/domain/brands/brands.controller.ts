@@ -53,9 +53,7 @@ export class BrandsController {
     @Body()
     dto: CreateBrandDto,
   ) {
-    const brand = await this.brandsService.create(dto);
-
-    return brand;
+    return await this.brandsService.create(dto);
   }
 
   @ApiOperation({ summary: 'update existing brand' })
@@ -67,24 +65,22 @@ export class BrandsController {
     @Body()
     dto: UpdateBrandDto,
   ) {
-    const brand = await this.brandsService.update(id, dto);
-
-    return brand;
+    return await this.brandsService.update(id, dto);
   }
 
   @ApiOperation({ summary: 'upload svg image' })
   @UseInterceptors(
-    FileInterceptor('image', { storage: fileStorageHelper(ROUTES.brands) }),
+    FileInterceptor('icon', { storage: fileStorageHelper(ROUTES.brands) }),
   )
-  @Put('/:id/update-image')
-  public async updateBrandImage(
+  @Put('/:id/update-icon')
+  public async updateBrandIcon(
+    @Param('id') id: string,
     @UploadedFile(
       new ParseFilePipe({
         validators: [new FileTypeValidator({ fileType: '.(svg|SVG)' })],
       }),
     )
     icon: Express.Multer.File,
-    @Param('id') id: string,
   ) {
     const filePath = `/${SERVE_FOLDER}/${ROUTES.brands}/${icon.filename}`;
 
@@ -98,15 +94,15 @@ export class BrandsController {
   @ApiResponse({ status: 404, description: 'Brand was not found' })
   @Delete('/:id')
   public async deleteBrand(@Param('id') id: string) {
-    const deletedBrand = await this.brandsService.delete(id);
+    await this.brandsService.delete(id);
 
-    return deletedBrand;
+    return { status: 204, result: 'success' };
   }
 
   @ApiOperation({ summary: 'get brand by slug' })
   @ApiResponse({ status: 200, type: Brand, isArray: true })
   @Get('get-by-slug/:slug')
   public async getBySlug(@Param('slug') slug: string) {
-    return await this.brandsService.getOneByQuery({ slug });
+    return await this.brandsService.getBySlug(slug);
   }
 }
