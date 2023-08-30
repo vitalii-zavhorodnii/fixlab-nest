@@ -2,7 +2,7 @@ import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import * as path from 'path';
 
-import { SERVE_FOLDER } from 'constants/routes';
+import { SERVE_FOLDER } from 'constants/routes.constants';
 
 export const fileStorageHelper = (subfolder: string | undefined | null) => {
   return diskStorage({

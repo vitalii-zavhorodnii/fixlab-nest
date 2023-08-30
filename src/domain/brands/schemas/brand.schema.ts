@@ -6,21 +6,43 @@ export type BrandDocument = HydratedDocument<Brand>;
 
 @Schema()
 class Brand {
+  @ApiProperty({ example: true })
+  @Prop({ default: false, required: false })
+  readonly isActive: boolean;
+
+  @ApiProperty({ example: 'apple' })
+  @Prop({ unique: true, set: (v: string) => v?.toLowerCase() })
+  readonly slug: string;
+
   @ApiProperty({ example: 'Apple' })
   @Prop()
   readonly title: string;
 
-  @ApiProperty({ example: 'img dummy NOT USE IT' })
-  @Prop()
+  @ApiProperty({ example: 'public/brands/icon.svg' })
+  @Prop({ required: false, default: null })
+  readonly icon: string;
+
+  @ApiProperty({ example: 'public/brands/image.svg' })
+  @Prop({ required: false, default: null })
   readonly image: string;
 
-  @ApiProperty({ example: 'apple' })
-  @Prop()
-  readonly slug: string;
+  @ApiProperty({ example: 'public/brands/image.svg', isArray: true })
+  @Prop({ required: false, default: null })
+  readonly gallery: string[];
 
-  @ApiProperty({ example: true })
-  @Prop()
-  readonly isActive: boolean;
+  @ApiProperty({
+    example: {
+      title: 'seo title',
+      description: 'seo description',
+      keywords: 'seo keywords',
+    },
+  })
+  @Prop({ type: Object, required: true })
+  readonly metadata: {
+    seo_title: string;
+    seo_description: string;
+    seo_keywords: string;
+  };
 }
 
 const BrandSchema = SchemaFactory.createForClass(Brand);
