@@ -19,11 +19,11 @@ import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Brand } from './schemas/brand.schema';
 import { BrandsService } from './brands.service';
 
-import { fileStorageHelper } from 'helpers/file-storage.helper';
+import { FileStorageHelper } from 'helpers/file-storage.helper';
 import { CreateBrandDto } from './dto/create-brand.dto';
+import { UpdateBrandDto } from './dto/update-brand.dto';
 
 import { ROUTES, SERVE_FOLDER } from 'constants/routes.constants';
-import { UpdateBrandDto } from './dto/update-brand.dto';
 
 @ApiTags(ROUTES.brands)
 @Controller(ROUTES.brands)
@@ -70,7 +70,7 @@ export class BrandsController {
 
   @ApiOperation({ summary: 'upload svg image' })
   @UseInterceptors(
-    FileInterceptor('icon', { storage: fileStorageHelper(ROUTES.brands) }),
+    FileInterceptor('icon', { storage: FileStorageHelper(ROUTES.brands) }),
   )
   @Put('/:id/update-icon')
   public async updateBrandIcon(

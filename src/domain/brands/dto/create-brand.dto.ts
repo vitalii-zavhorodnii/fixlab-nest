@@ -38,7 +38,7 @@ export class CreateBrandDto {
   @IsNotEmpty()
   @IsString()
   @Length(1, 60, {
-    message: 'field required to be 1-60 symbols length',
+    message: 'title required to be 1-60 symbols length',
   })
   readonly title: string;
 

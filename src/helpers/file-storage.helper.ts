@@ -4,7 +4,7 @@ import * as path from 'path';
 
 import { SERVE_FOLDER } from 'constants/routes.constants';
 
-export const fileStorageHelper = (subfolder: string | undefined | null) => {
+export const FileStorageHelper = (subfolder: string | undefined | null) => {
   return diskStorage({
     destination: `./${SERVE_FOLDER}/${subfolder ?? ''}`,
     filename: (_req, file, cb) => {
