@@ -13,7 +13,6 @@ import { ROUTES } from 'constants/routes.constants';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @UseGuards(AuthGuard('local'))
   @Post('/login')
   async login(@Body() dto: LoginDto) {
     return await this.authService.login(dto);

@@ -1,11 +1,11 @@
-import { HydratedDocument, Types } from 'mongoose';
+import { HydratedDocument, Document, Types } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 
 export type BrandDocument = HydratedDocument<Brand>;
 
-@Schema()
-class Brand {
+@Schema({ versionKey: false })
+class Brand extends Document {
   @ApiProperty({ example: '64ef4383e46e72721c03090e' })
   @Prop({
     type: Types.ObjectId,

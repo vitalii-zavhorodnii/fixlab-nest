@@ -22,18 +22,40 @@ export class UsersService {
     const createdUser = await new this.userModel({ ...dto, password }).save();
     const user = await this.userModel
       .findOne({ login: createdUser.login })
-      .select('-password -__v');
+      .select('-password');
 
     return user;
   }
 
-  public async getUserByQuery(query: { password?: string; login?: string }) {
-    const user = await this.userModel.findOne(query).select('-password -__v');
+  public async findUserByQuery(query: { password?: string; login?: string }) {
+    const user = await this.userModel.findOne(query).select('-password');
 
     if (!user) {
       throw new NotFoundException(
         `User with login "${query.login}" was not found`,
       );
+    }
+
+    return user;
+  }
+
+  public async findUserByLogin(login: string) {
+    const user = await this.userModel
+      .findOne({ login })
+      .select('-password');
+
+    if (!user) {
+      throw new NotFoundException(`User with login "${login}" was not found`);
+    }
+
+    return user;
+  }
+
+  public async findById(id: string) {
+    const user = await this.userModel.findById(id);
+
+    if (!user) {
+      throw new NotFoundException(`User with ID "${id}" was not found`);
     }
 
     return user;

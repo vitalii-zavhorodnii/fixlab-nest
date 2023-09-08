@@ -1,0 +1,71 @@
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+
+import { ContactsService } from './contacts.service';
+
+import { CreateContactDto } from './dto/create-contact.dto';
+import { UpdateContactDto } from './dto/update-contact.dto';
+
+import { ROUTES } from 'constants/routes.constants';
+import { Contact } from './schemas/contact.schema';
+
+@ApiTags(ROUTES.contacts)
+@Controller(ROUTES.contacts)
+export class ContactsController {
+  constructor(private readonly contactsService: ContactsService) {}
+
+  @ApiOperation({ summary: 'find all active Contacts' })
+  @ApiResponse({ status: 200, type: Contact, isArray: true })
+  @Get('')
+  public async findAllActiveContacts() {
+    return await this.contactsService.findByQuery({ isActive: true });
+  }
+
+  @ApiOperation({ summary: 'find all Contacts' })
+  @ApiResponse({ status: 200, type: Contact, isArray: true })
+  @Get('/all')
+  public async findAll() {
+    return await this.contactsService.findAll();
+  }
+
+  @ApiOperation({ summary: 'create new Contact' })
+  @ApiResponse({ status: 200, type: Contact })
+  @Post('')
+  public async create(@Body() dto: CreateContactDto) {
+    return await this.contactsService.create(dto);
+  }
+
+  @ApiOperation({ summary: 'find Contact by ID' })
+  @ApiResponse({ status: 200, type: Contact })
+  @ApiResponse({ status: 404, description: 'Contact was not found' })
+  @Get('/:id')
+  public async findOne(@Param('id') id: string) {
+    return await this.contactsService.findById(id);
+  }
+
+  @ApiOperation({ summary: 'update existing Contact by ID' })
+  @ApiResponse({ status: 200, type: Contact })
+  @ApiResponse({ status: 404, description: 'Contact was not found' })
+  @Patch('/:id')
+  public async update(@Param('id') id: string, @Body() dto: UpdateContactDto) {
+    return await this.contactsService.update(id, dto);
+  }
+
+  @ApiOperation({ summary: 'remove permanently Contact by ID' })
+  @ApiResponse({ status: 204 })
+  @ApiResponse({ status: 404, description: 'Contact was not found' })
+  @Delete('/:id')
+  public async remove(@Param('id') id: string) {
+    await this.contactsService.remove(id);
+
+    return { status: 204, result: 'success' };
+  }
+}

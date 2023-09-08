@@ -6,6 +6,7 @@ import { GadgetsModule } from './gadgets/gadgets.module';
 import { BrandsModule } from './brands/brands.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { ContactsModule } from './contacts/contacts.module';
 
 
 @Module({
@@ -23,6 +24,7 @@ import { AuthModule } from './auth/auth.module';
     BrandsModule,
     UsersModule,
     AuthModule,
+    ContactsModule,
   ],
   controllers: [],
   providers: [],

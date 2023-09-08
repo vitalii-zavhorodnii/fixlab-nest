@@ -11,11 +11,15 @@ import {
   UseInterceptors,
   ParseFilePipe,
   FileTypeValidator,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 import { UsersService } from './users.service';
+import { LocalStrategy } from 'domain/auth/strategies/local.strategy';
 import { CreateUserDto } from './dto/create-user.dto';
+import { AuthUserId } from './decorators/user.decorator';
 
 import { ROUTES } from 'constants/routes.constants';
 
@@ -33,5 +37,14 @@ export class UsersController {
     dto: CreateUserDto,
   ) {
     return await this.usersService.create(dto);
+  }
+
+  @ApiOperation({ summary: 'get info about current user' })
+  @ApiResponse({ status: 200 })
+  @ApiResponse({ status: 400, description: 'Incorrect content data' })
+  @UseGuards(AuthGuard(LocalStrategy.name))
+  @Get('/me')
+  public async aboutUser(@AuthUserId() id: string) {
+    return await this.usersService.findById(id);
   }
 }

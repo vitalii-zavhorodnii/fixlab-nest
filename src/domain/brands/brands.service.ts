@@ -15,20 +15,20 @@ import { UpdateBrandDto } from './dto/update-brand.dto';
 export class BrandsService {
   constructor(@InjectModel(Brand.name) private brandModel: Model<Brand>) {}
 
-  public async getAll(): Promise<Brand[]> {
-    return await this.brandModel.find().select('-__v');
+  public async findAll(): Promise<Brand[]> {
+    return await this.brandModel.find();
   }
 
-  public async getByQuery(query: UpdateBrandDto): Promise<Brand[]> {
-    return await this.brandModel.find(query).select('-__v');
+  public async findByQuery(query: UpdateBrandDto): Promise<Brand[]> {
+    return await this.brandModel.find(query);
   }
 
-  public async getOneByQuery(query: UpdateBrandDto): Promise<Brand> {
-    return await this.brandModel.findOne(query).select('-__v');
+  public async findOneByQuery(query: UpdateBrandDto): Promise<Brand> {
+    return await this.brandModel.findOne(query);
   }
 
-  public async getBySlug(slug: string): Promise<Brand> {
-    const brand = await this.brandModel.findOne({ slug }).select('-__v');
+  public async findBySlug(slug: string): Promise<Brand> {
+    const brand = await this.brandModel.findOne({ slug });
 
     if (!brand) {
       throw new NotFoundException(`Brand with slug "${slug}" was not found`);
@@ -37,12 +37,12 @@ export class BrandsService {
     return brand;
   }
 
-  public async getById(id: string): Promise<Brand> {
+  public async findById(id: string): Promise<Brand> {
     if (!Types.ObjectId.isValid(id)) {
       throw new NotFoundException(`Incorrect ID - ${id}`);
     }
 
-    const brand = await this.brandModel.findById(id).select('-__v');
+    const brand = await this.brandModel.findById(id);
 
     if (!brand) {
       throw new NotFoundException(`Brand with ID "${id}" was not found`);
@@ -61,13 +61,13 @@ export class BrandsService {
     }
 
     const createdBrand = await new this.brandModel(dto).save();
-    const brand = await this.getById(createdBrand.id);
+    const brand = await this.findById(createdBrand.id);
 
     return brand;
   }
 
   public async update(id: string, dto: UpdateBrandDto): Promise<Brand> {
-    const foundBrand = await this.getById(id);
+    const foundBrand = await this.findById(id);
 
     if (!foundBrand) {
       throw new NotFoundException(`Brand with ID ${id} was not found`);

@@ -1,12 +1,11 @@
 import {
   Controller,
-  UsePipes,
   Param,
   UploadedFile,
   Body,
   Get,
   Post,
-  Put,
+  Patch,
   Delete,
   UseInterceptors,
   ParseFilePipe,
@@ -30,22 +29,36 @@ import { ROUTES, SERVE_FOLDER } from 'constants/routes.constants';
 export class BrandsController {
   constructor(private readonly brandsService: BrandsService) {}
 
-  @ApiOperation({ summary: 'get all brands' })
+  @ApiOperation({ summary: 'CLIENT SIDE: get all active brands' })
   @ApiResponse({ status: 200, type: Brand, isArray: true })
   @Get('')
-  public async getAllBrands() {
-    return await this.brandsService.getAll();
+  public async findAllActiveBrands() {
+    return await this.brandsService.findByQuery({ isActive: true });
   }
 
-  @ApiOperation({ summary: 'get gadget by ID' })
+  @ApiOperation({ summary: 'CLIENT SIDE: get brand by slug' })
+  @ApiResponse({ status: 200, type: Brand, isArray: true })
+  @Get('find-by-slug/:slug')
+  public async findBySlug(@Param('slug') slug: string) {
+    return await this.brandsService.findBySlug(slug);
+  }
+
+  @ApiOperation({ summary: 'get Brands data, auth reqiured*' })
+  @ApiResponse({ status: 200, type: Brand, isArray: true })
+  @Get('/all')
+  public async findAllBrands() {
+    return await this.brandsService.findAll();
+  }
+
+  @ApiOperation({ summary: 'get Brand data by ID, auth reqiured*' })
   @ApiResponse({ status: 200, type: Brand })
   @ApiResponse({ status: 404, description: 'Brands was not found' })
   @Get('/:id')
-  public async getBrandById(@Param('id') id: string) {
-    return await this.brandsService.getById(id);
+  public async findBrandById(@Param('id') id: string) {
+    return await this.brandsService.findById(id);
   }
 
-  @ApiOperation({ summary: 'create new brand' })
+  @ApiOperation({ summary: 'create new Brand' })
   @ApiResponse({ status: 200, type: Brand })
   @ApiResponse({ status: 400, description: 'Incorrect content data' })
   @Post('')
@@ -56,10 +69,10 @@ export class BrandsController {
     return await this.brandsService.create(dto);
   }
 
-  @ApiOperation({ summary: 'update existing brand' })
+  @ApiOperation({ summary: 'update existing Brand by ID' })
   @ApiResponse({ status: 200, type: Brand })
   @ApiResponse({ status: 404, description: 'Brand was not found' })
-  @Put('/:id')
+  @Patch('/:id')
   public async updateBrand(
     @Param('id') id: string,
     @Body()
@@ -68,11 +81,11 @@ export class BrandsController {
     return await this.brandsService.update(id, dto);
   }
 
-  @ApiOperation({ summary: 'upload svg image' })
+  @ApiOperation({ summary: 'upload svg image for Brand by ID' })
   @UseInterceptors(
     FileInterceptor('icon', { storage: FileStorageHelper(ROUTES.brands) }),
   )
-  @Put('/:id/update-icon')
+  @Patch('/:id/update-icon')
   public async updateBrandIcon(
     @Param('id') id: string,
     @UploadedFile(
@@ -89,7 +102,7 @@ export class BrandsController {
     return filePath;
   }
 
-  @ApiOperation({ summary: 'remove permanently brand' })
+  @ApiOperation({ summary: 'remove permanently Brand by ID' })
   @ApiResponse({ status: 204 })
   @ApiResponse({ status: 404, description: 'Brand was not found' })
   @Delete('/:id')
@@ -97,12 +110,5 @@ export class BrandsController {
     await this.brandsService.delete(id);
 
     return { status: 204, result: 'success' };
-  }
-
-  @ApiOperation({ summary: 'get brand by slug' })
-  @ApiResponse({ status: 200, type: Brand, isArray: true })
-  @Get('get-by-slug/:slug')
-  public async getBySlug(@Param('slug') slug: string) {
-    return await this.brandsService.getBySlug(slug);
   }
 }

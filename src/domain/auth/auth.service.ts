@@ -12,7 +12,7 @@ export class AuthService {
   ) {}
 
   public async validateUser(login: string, password: string): Promise<any> {
-    const user = await this.usersService.getUserByQuery({ login });
+    const user = await this.usersService.findUserByLogin(login);
 
     if (!user) return null;
 
@@ -31,7 +31,7 @@ export class AuthService {
   }
 
   public async login(user: any) {
-    const payload = { username: user.username, sub: user._id };
+    const payload = { username: user.login, sub: user._id };
 
     return {
       token: this.jwtService.sign(payload),
