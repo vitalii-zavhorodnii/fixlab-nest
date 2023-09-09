@@ -61,7 +61,7 @@ export class BrandsService {
     }
 
     const createdBrand = await new this.brandModel(dto).save();
-    const brand = await this.findById(createdBrand.id);
+    const brand = await this.findById(createdBrand._id);
 
     return brand;
   }

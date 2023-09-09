@@ -7,6 +7,7 @@ import { BrandsModule } from './brands/brands.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ContactsModule } from './contacts/contacts.module';
+import { IssuesModule } from './issues/issues.module';
 
 
 @Module({
@@ -25,6 +26,7 @@ import { ContactsModule } from './contacts/contacts.module';
     UsersModule,
     AuthModule,
     ContactsModule,
+    IssuesModule,
   ],
   controllers: [],
   providers: [],

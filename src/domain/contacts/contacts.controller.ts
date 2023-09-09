@@ -8,14 +8,15 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Public } from 'decorators/public.decorator';
 
 import { ContactsService } from './contacts.service';
+import { Contact } from './schemas/contact.schema';
 
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 
 import { ROUTES } from 'constants/routes.constants';
-import { Contact } from './schemas/contact.schema';
 
 @ApiTags(ROUTES.contacts)
 @Controller(ROUTES.contacts)
@@ -24,6 +25,7 @@ export class ContactsController {
 
   @ApiOperation({ summary: 'find all active Contacts' })
   @ApiResponse({ status: 200, type: Contact, isArray: true })
+  @Public()
   @Get('')
   public async findAllActiveContacts() {
     return await this.contactsService.findByQuery({ isActive: true });

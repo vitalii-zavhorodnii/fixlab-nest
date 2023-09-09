@@ -5,6 +5,7 @@ export const ROUTES = {
   users: 'users',
   auth: 'auth',
   contacts: 'contacts',
+  issues: 'issues',
 };
 
 export const SERVE_FOLDER = 'public';

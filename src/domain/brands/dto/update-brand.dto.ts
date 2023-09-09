@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import MetadataProps from 'shared/metadata-props.schema';
 
 export class UpdateBrandDto {
   @ApiProperty({
@@ -26,18 +27,9 @@ export class UpdateBrandDto {
   readonly isActive?: boolean;
 
   @ApiProperty({
-    example: {
-      title: 'seo title',
-      description: 'seo description',
-      keywords: 'seo keywords',
-    },
-    required: true,
+    type: MetadataProps,
   })
-  readonly metadata?: {
-    seo_title?: string;
-    seo_description?: string;
-    seo_keywords?: string;
-  };
+  readonly metadata?: MetadataProps;
 
   readonly icon?: string;
 }

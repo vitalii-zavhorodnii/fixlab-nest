@@ -12,22 +12,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-class MetadataDto {
-  @IsDefined()
-  @IsNotEmpty()
-  @IsString()
-  readonly seo_title: string;
-
-  @IsDefined()
-  @IsNotEmpty()
-  @IsString()
-  readonly seo_description: string;
-
-  @IsDefined()
-  @IsNotEmpty()
-  @IsString()
-  readonly seo_keywords: string;
-}
+import { MetadataDto } from 'shared/metadata.dto';
 
 export class CreateBrandDto {
   @ApiProperty({
@@ -69,11 +54,7 @@ export class CreateBrandDto {
   readonly isActive?: boolean;
 
   @ApiProperty({
-    example: {
-      title: 'seo title',
-      description: 'seo description',
-      keywords: 'seo keywords',
-    },
+    type: MetadataDto,
   })
   @IsDefined()
   @IsObject()

@@ -17,8 +17,6 @@ export class UsersService {
   public async create(dto: CreateUserDto) {
     const password = await PasswordEncryptHelper(dto.password);
 
-    console.log({ ...dto, password });
-
     const createdUser = await new this.userModel({ ...dto, password }).save();
     const user = await this.userModel
       .findOne({ login: createdUser.login })
@@ -40,9 +38,7 @@ export class UsersService {
   }
 
   public async findUserByLogin(login: string) {
-    const user = await this.userModel
-      .findOne({ login })
-      .select('-password');
+    const user = await this.userModel.findOne({ login });
 
     if (!user) {
       throw new NotFoundException(`User with login "${login}" was not found`);

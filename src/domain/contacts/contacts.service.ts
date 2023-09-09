@@ -14,8 +14,6 @@ export class ContactsService {
   ) {}
 
   public async create(dto: CreateContactDto): Promise<Contact> {
-    console.log({ dto });
-
     const createdContact = await new this.contactModel(dto).save();
 
     return createdContact;
@@ -51,7 +49,7 @@ export class ContactsService {
         new: true,
       })
       .populate('coords');
-      
+
     return updatedContact;
   }
 

@@ -7,11 +7,11 @@ export type ContactDocument = HydratedDocument<Contact>;
 class Coords {
   @ApiProperty({ example: 50.44930083819644 })
   @Prop({ type: Number })
-  lang: number;
+  readonly lang: number;
 
   @ApiProperty({ example: 30.523043428894475 })
   @Prop({ type: Number })
-  lat: number;
+  readonly lat: number;
 }
 
 @Schema({ versionKey: false })
@@ -25,39 +25,39 @@ class Contact extends Document {
 
   @ApiProperty({ example: true })
   @Prop({ type: Boolean, default: false })
-  isActive: boolean;
+  readonly isActive: boolean;
 
   @ApiProperty({ example: 'Голосіївський' })
   @Prop({ type: String, required: true })
-  area: string;
+  readonly area: string;
 
   @ApiProperty({ example: 'Саперно-Слобідська, 10' })
   @Prop({ type: String })
-  address: string;
+  readonly address: string;
 
   @ApiProperty({ example: 'Вхід через супермаркет ВЕЛМАРТ' })
   @Prop({ type: String })
-  comment: string;
+  readonly comment: string;
 
   @ApiProperty({ example: ['Мінська', 'Оболонь'] })
   @Prop({ type: [String] })
-  subways: Array<string>;
+  readonly subways: Array<string>;
 
   @ApiProperty({ example: ['+38 050 227 27 28', '+38 050 227 27 30'] })
   @Prop({ type: [String] })
-  phones: Array<string>;
+  readonly phones: Array<string>;
 
   @ApiProperty({ example: '10:00 - 19:30' })
   @Prop({ type: String })
-  workingTime: string;
+  readonly workingTime: string;
 
   @ApiProperty({ example: 'нд - вихідний' })
   @Prop({ type: String })
-  workingDate: string;
+ readonly workingDate: string;
 
   @ApiProperty({ type: Coords })
   @Prop({ _id: false, type: Coords })
-  coords: Coords;
+  readonly coords: Coords;
 }
 
 const ContactSchema = SchemaFactory.createForClass(Contact);

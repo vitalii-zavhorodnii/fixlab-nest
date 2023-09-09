@@ -10,10 +10,12 @@ import {
   UseInterceptors,
   ParseFilePipe,
   FileTypeValidator,
+  UseGuards,
 } from '@nestjs/common';
 import { Express } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Public } from 'decorators/public.decorator';
 
 import { Brand } from './schemas/brand.schema';
 import { BrandsService } from './brands.service';
@@ -29,15 +31,17 @@ import { ROUTES, SERVE_FOLDER } from 'constants/routes.constants';
 export class BrandsController {
   constructor(private readonly brandsService: BrandsService) {}
 
-  @ApiOperation({ summary: 'CLIENT SIDE: get all active brands' })
+  @ApiOperation({ summary: 'Client: get all active brands' })
   @ApiResponse({ status: 200, type: Brand, isArray: true })
+  @Public()
   @Get('')
   public async findAllActiveBrands() {
     return await this.brandsService.findByQuery({ isActive: true });
   }
 
-  @ApiOperation({ summary: 'CLIENT SIDE: get brand by slug' })
+  @ApiOperation({ summary: 'Client: get brand by slug' })
   @ApiResponse({ status: 200, type: Brand, isArray: true })
+  @Public()
   @Get('find-by-slug/:slug')
   public async findBySlug(@Param('slug') slug: string) {
     return await this.brandsService.findBySlug(slug);
