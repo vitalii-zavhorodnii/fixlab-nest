@@ -19,13 +19,11 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  public async login(dto: LoginDto) {
+  public async login(dto: LoginDto): Promise<string> {
     const user = await this.validatePassword(dto);
 
     const payload = { sub: user._id, login: user.login };
-    return {
-      access_token: await this.jwtService.signAsync(payload),
-    };
+    return await this.jwtService.signAsync(payload);
   }
 
   public async validatePassword({ login, password }: LoginDto): Promise<User> {
