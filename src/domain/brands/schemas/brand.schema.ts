@@ -16,28 +16,28 @@ class Brand extends Document {
   readonly id: string;
 
   @ApiProperty({ example: true })
-  @Prop({ default: false, required: false })
+  @Prop({ type: Boolean, default: false, required: false })
   readonly isActive: boolean;
 
   @ApiProperty({ example: 'apple' })
-  @Prop({ unique: true, set: (v: string) => v?.toLowerCase() })
+  @Prop({ type: String, unique: true, set: (v: string) => v?.toLowerCase() })
   readonly slug: string;
 
   @ApiProperty({ example: 'Apple' })
-  @Prop()
+  @Prop({ type: String })
   readonly title: string;
 
   @ApiProperty({ example: 'public/brands/icon.svg' })
-  @Prop({ required: false, default: null })
+  @Prop({ type: String, required: false, default: null })
   readonly icon: string;
 
   @ApiProperty({ example: 'public/brands/image.svg' })
-  @Prop({ required: false, default: null })
+  @Prop({ type: String, required: false, default: null })
   readonly image: string;
 
   @ApiProperty({ example: 'public/brands/image.svg', isArray: true })
-  @Prop({ required: false, default: null })
-  readonly gallery: string[];
+  @Prop({ type: [String], required: false, default: null })
+  readonly gallery: Array<string>;
 
   @ApiProperty({
     type: MetadataProps
