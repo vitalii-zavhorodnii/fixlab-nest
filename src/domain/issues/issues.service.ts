@@ -4,9 +4,6 @@ import { Model, Types } from 'mongoose';
 
 import { Issue } from './schemas/issue.schema';
 
-import { CreateIssueDto } from './dto/create-issue.dto';
-import { UpdateIssueDto } from './dto/update-issue.dto';
-
 @Injectable()
 export class IssuesService {
   constructor(@InjectModel(Issue.name) private issueModel: Model<Issue>) {}

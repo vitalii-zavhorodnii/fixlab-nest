@@ -53,7 +53,7 @@ class Contact extends Document {
 
   @ApiProperty({ example: 'нд - вихідний' })
   @Prop({ type: String })
- readonly workingDate: string;
+  readonly workingDate: string;
 
   @ApiProperty({ type: Coords })
   @Prop({ _id: false, type: Coords })

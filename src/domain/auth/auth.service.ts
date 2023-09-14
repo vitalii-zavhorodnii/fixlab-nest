@@ -1,14 +1,9 @@
-import {
-  Injectable,
-  NotFoundException,
-  NotAcceptableException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
 import { UsersService } from 'domain/users/users.service';
 import { User } from 'domain/users/schemas/user.schema';
-import { PasswordEncryptHelper } from 'helpers/password-encrypt.helper';
 
 import { LoginDto } from './dto/login.dto';
 

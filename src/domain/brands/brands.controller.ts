@@ -10,7 +10,6 @@ import {
   UseInterceptors,
   ParseFilePipe,
   FileTypeValidator,
-  UseGuards,
 } from '@nestjs/common';
 import { Express } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';

@@ -9,7 +9,6 @@ import { AuthModule } from './auth/auth.module';
 import { ContactsModule } from './contacts/contacts.module';
 import { IssuesModule } from './issues/issues.module';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot(),

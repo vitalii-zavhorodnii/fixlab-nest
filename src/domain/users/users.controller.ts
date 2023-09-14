@@ -1,19 +1,4 @@
-import {
-  Controller,
-  UsePipes,
-  Param,
-  UploadedFile,
-  Body,
-  Get,
-  Post,
-  Put,
-  Delete,
-  UseInterceptors,
-  ParseFilePipe,
-  FileTypeValidator,
-  UseGuards,
-} from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Controller, Param, Body, Get, Post, Delete } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 import { UsersService } from './users.service';
