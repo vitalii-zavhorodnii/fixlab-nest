@@ -13,7 +13,6 @@ export const SwaggerHelper = (app: INestApplication) => {
     .setTitle(SWAGGER_TITLE)
     .setDescription(SWAGGER_DESCRIPTION)
     .setVersion(SWAGGER_VERSION)
-    .setBasePath(PREFIX)
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

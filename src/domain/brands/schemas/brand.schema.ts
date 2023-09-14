@@ -2,6 +2,9 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { Document, HydratedDocument, Types } from 'mongoose';
 
+import { Type } from 'class-transformer';
+
+import { Gadget } from 'domain/gadgets/schemas/gadget.schema';
 import MetadataProps from 'shared/metadata-props.schema';
 
 export type BrandDocument = HydratedDocument<Brand>;
