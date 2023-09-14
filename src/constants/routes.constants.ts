@@ -9,3 +9,4 @@ export const ROUTES = {
 };
 
 export const SERVE_FOLDER = 'public';
+export const PREFIX = 'api';
