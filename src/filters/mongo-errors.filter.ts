@@ -1,5 +1,6 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
 import { Response } from 'express';
+
 import { MongoError } from 'mongodb';
 
 @Catch(MongoError)
@@ -11,7 +12,7 @@ export class MongoErrorsFilter implements ExceptionFilter {
 
     response.status(409).json({
       statusCode: 409,
-      message: message,
+      message: message
     });
   }
 
