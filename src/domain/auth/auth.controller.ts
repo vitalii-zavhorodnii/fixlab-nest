@@ -14,7 +14,10 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @ApiOperation({ summary: 'Get token with login and password' })
-  @ApiResponse({ status: 200 })
+  @ApiResponse({
+    status: 200,
+    type: 'token'
+  })
   @ApiResponse({ status: 401 })
   @Public()
   @Post('/login')

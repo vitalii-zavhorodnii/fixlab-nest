@@ -15,18 +15,18 @@ import { PREFIX } from 'constants/routes.constants';
 (async () => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  app.setGlobalPrefix(PREFIX);
+
   app.useGlobalFilters(new MongoErrorsFilter());
   app.useGlobalPipes(new ValidationPipe());
+
   app.useStaticAssets(join(__dirname, '..', 'public'), {
     prefix: '/public'
   });
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
-  const swagger = new SwaggerHelper();
-  swagger.init(app);
-
-  app.setGlobalPrefix(PREFIX);
+  SwaggerHelper(app);
 
   await app.listen(process.env.PORT);
 })();

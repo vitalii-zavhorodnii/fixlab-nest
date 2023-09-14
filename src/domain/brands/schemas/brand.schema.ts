@@ -35,6 +35,10 @@ class Brand extends Document {
   @Prop({ type: String, required: false, default: null })
   readonly image: string;
 
+  @ApiProperty({ example: 'Reparing Apple phones...' })
+  @Prop({ type: String, required: false, default: null })
+  readonly article: string;
+
   @ApiProperty({ example: 'public/brands/image.svg', isArray: true })
   @Prop({ type: [String], required: false, default: null })
   readonly gallery: Array<string>;

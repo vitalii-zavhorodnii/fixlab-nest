@@ -8,7 +8,7 @@ export class LoginDto {
   readonly login: string;
 
   @ApiProperty({
-    example: 'pass12345',
+    example: 'Passord123456',
     description: 'Password'
   })
   readonly password: string;
