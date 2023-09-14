@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
-import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { PassportModule } from '@nestjs/passport';
+import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 
-import { UsersModule } from 'domain/users/users.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { UsersModule } from 'domain/users/users.module';
+
 import { AuthGuard } from './guards/auth.guard';
 
 @Module({
@@ -16,18 +17,18 @@ import { AuthGuard } from './guards/auth.guard';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('SECRET'),
+        secret: configService.get<string>('SECRET')
       }),
-      inject: [ConfigService],
-    }),
+      inject: [ConfigService]
+    })
   ],
   providers: [
     AuthService,
     {
       provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
+      useClass: AuthGuard
+    }
   ],
-  controllers: [AuthController],
+  controllers: [AuthController]
 })
 export class AuthModule {}

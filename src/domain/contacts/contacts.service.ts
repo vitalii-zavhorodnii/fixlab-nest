@@ -10,7 +10,8 @@ import { UpdateContactDto } from './dto/update-contact.dto';
 @Injectable()
 export class ContactsService {
   constructor(
-    @InjectModel(Contact.name) private contactModel: Model<Contact>,
+    @InjectModel(Contact.name)
+    private readonly contactModel: Model<Contact>
   ) {}
 
   public async create(dto: CreateContactDto): Promise<Contact> {
@@ -46,7 +47,7 @@ export class ContactsService {
 
     const updatedContact = await this.contactModel
       .findByIdAndUpdate(id, dto, {
-        new: true,
+        new: true
       })
       .populate('coords');
 

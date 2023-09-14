@@ -4,14 +4,14 @@ import { Model, Types } from 'mongoose';
 
 import { User } from './schemas/user.schema';
 
-import { CreateUserDto } from './dto/create-user.dto';
-
 import { PasswordEncryptHelper } from 'helpers/password-encrypt.helper';
+
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectModel(User.name) private readonly userModel: Model<User>,
+    @InjectModel(User.name) private readonly userModel: Model<User>
   ) {}
 
   public async create(dto: CreateUserDto): Promise<User> {
@@ -33,7 +33,7 @@ export class UsersService {
 
     if (!user) {
       throw new NotFoundException(
-        `User with login "${query.login}" was not found`,
+        `User with login "${query.login}" was not found`
       );
     }
 

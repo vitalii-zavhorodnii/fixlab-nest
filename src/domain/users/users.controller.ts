@@ -1,9 +1,11 @@
-import { Controller, Param, Body, Get, Post, Delete } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
+
 import { User } from './schemas/user.schema';
+
+import { CreateUserDto } from './dto/create-user.dto';
 
 import { ROUTES } from 'constants/routes.constants';
 
@@ -16,9 +18,9 @@ export class UsersController {
   @ApiResponse({ status: 200, type: User })
   @ApiResponse({ status: 400, description: 'Incorrect content data' })
   @Post('')
-  public async createUser(
+  public async createuser(
     @Body()
-    dto: CreateUserDto,
+    dto: CreateUserDto
   ) {
     return await this.usersService.create(dto);
   }

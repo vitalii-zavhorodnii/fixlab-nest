@@ -8,9 +8,9 @@ import { Gadget, GadgetSchema } from './schemas/gadget.schema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Gadget.name, schema: GadgetSchema }]),
+    MongooseModule.forFeature([{ name: Gadget.name, schema: GadgetSchema }])
   ],
   controllers: [GadgetsController],
-  providers: [GadgetsService],
+  providers: [GadgetsService]
 })
 export class GadgetsModule {}

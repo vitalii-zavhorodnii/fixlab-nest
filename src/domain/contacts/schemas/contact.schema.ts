@@ -1,6 +1,6 @@
-import { HydratedDocument, Types, Document } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
+import { Document, HydratedDocument, Types } from 'mongoose';
 
 export type ContactDocument = HydratedDocument<Contact>;
 
@@ -19,7 +19,7 @@ class Contact extends Document {
   @ApiProperty({ example: '64ef4383e46e72721c03090e' })
   @Prop({
     type: Types.ObjectId,
-    auto: true,
+    auto: true
   })
   readonly id: string;
 
@@ -68,4 +68,4 @@ ContactSchema.method('toJSON', function () {
   return object;
 });
 
-export { ContactSchema, Contact };
+export { Contact, ContactSchema };

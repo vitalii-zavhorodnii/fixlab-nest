@@ -1,6 +1,6 @@
-import { HydratedDocument } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
+import { HydratedDocument } from 'mongoose';
 
 export type GadgetDocument = HydratedDocument<Gadget>;
 
@@ -27,4 +27,4 @@ GadgetSchema.method('toJSON', function () {
   return object;
 });
 
-export { GadgetSchema, Gadget };
+export { Gadget, GadgetSchema };

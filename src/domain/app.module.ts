@@ -2,12 +2,12 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { GadgetsModule } from './gadgets/gadgets.module';
-import { BrandsModule } from './brands/brands.module';
-import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { BrandsModule } from './brands/brands.module';
 import { ContactsModule } from './contacts/contacts.module';
+import { GadgetsModule } from './gadgets/gadgets.module';
 import { IssuesModule } from './issues/issues.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -17,17 +17,17 @@ import { IssuesModule } from './issues/issues.module';
       inject: [ConfigService],
       useFactory: async (config: ConfigService) => ({
         uri: config.get<string>('MONGO_DB_LINK'),
-        dbName: 'fixlab-db',
-      }),
+        dbName: 'fixlab-db'
+      })
     }),
     GadgetsModule,
     BrandsModule,
     UsersModule,
     AuthModule,
     ContactsModule,
-    IssuesModule,
+    IssuesModule
   ],
   controllers: [],
-  providers: [],
+  providers: []
 })
 export class AppModule {}

@@ -1,12 +1,14 @@
-import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
+
 import { useContainer } from 'class-validator';
 import { join } from 'path';
 
 import { AppModule } from 'domain/app.module';
-import { SwaggerHelper } from 'helpers/swagger.helper';
+
 import { MongoErrorsFilter } from 'filters/mongo-errors.filter';
+import { SwaggerHelper } from 'helpers/swagger.helper';
 
 (async () => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -15,7 +17,7 @@ import { MongoErrorsFilter } from 'filters/mongo-errors.filter';
   app.useGlobalFilters(new MongoErrorsFilter());
   app.useGlobalPipes(new ValidationPipe());
   app.useStaticAssets(join(__dirname, '..', 'public'), {
-    prefix: '/public',
+    prefix: '/public'
   });
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });

@@ -1,10 +1,10 @@
 import {
   BadRequestException,
   Injectable,
-  NotFoundException,
+  NotFoundException
 } from '@nestjs/common';
-import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { Model, Types } from 'mongoose';
 
 import { Brand } from './schemas/brand.schema';
 
@@ -56,7 +56,7 @@ export class BrandsService {
 
     if (foundBrand) {
       throw new BadRequestException(
-        `Brand with slug "${dto.slug}" already exists`,
+        `Brand with slug "${dto.slug}" already exists`
       );
     }
 
@@ -74,7 +74,7 @@ export class BrandsService {
     }
 
     const brand = await this.brandModel.findByIdAndUpdate(id, dto, {
-      new: true,
+      new: true
     });
 
     return brand;

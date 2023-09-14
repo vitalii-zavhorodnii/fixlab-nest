@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 import { Gadget } from './schemas/gadget.schema';
 
@@ -13,7 +13,7 @@ export class GadgetsService {
   public async getAll(): Promise<Gadget[]> {
     return await this.gadgetModel.find({
       where: { isActive: true },
-      attributes: { exclude: ['createdAt', 'updatedAt'] },
+      attributes: { exclude: ['createdAt', 'updatedAt'] }
     });
   }
 

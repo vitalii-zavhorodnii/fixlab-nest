@@ -1,7 +1,8 @@
-import { Controller, Get, Param, Delete } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Controller, Delete, Get, Param } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { IssuesService } from './issues.service';
+
 import { Issue } from './schemas/issue.schema';
 
 import { ROUTES } from 'constants/routes.constants';

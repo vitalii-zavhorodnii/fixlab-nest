@@ -1,8 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+
 import * as bcrypt from 'bcrypt';
 
 import { UsersService } from 'domain/users/users.service';
+
 import { User } from 'domain/users/schemas/user.schema';
 
 import { LoginDto } from './dto/login.dto';
@@ -11,7 +13,7 @@ import { LoginDto } from './dto/login.dto';
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
-    private readonly jwtService: JwtService,
+    private readonly jwtService: JwtService
   ) {}
 
   public async login(dto: LoginDto): Promise<string> {

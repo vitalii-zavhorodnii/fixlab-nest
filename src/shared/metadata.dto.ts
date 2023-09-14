@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDefined, IsString, IsNotEmpty } from 'class-validator';
+
+import { IsDefined, IsNotEmpty, IsString } from 'class-validator';
 
 export class MetadataDto {
   @ApiProperty({ example: 'seo title' })

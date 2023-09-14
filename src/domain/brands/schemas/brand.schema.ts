@@ -1,6 +1,6 @@
-import { HydratedDocument, Document, Types } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
+import { Document, HydratedDocument, Types } from 'mongoose';
 
 import MetadataProps from 'shared/metadata-props.schema';
 
@@ -11,7 +11,7 @@ class Brand extends Document {
   @ApiProperty({ example: '64ef4383e46e72721c03090e' })
   @Prop({
     type: Types.ObjectId,
-    auto: true,
+    auto: true
   })
   readonly id: string;
 
@@ -40,7 +40,7 @@ class Brand extends Document {
   readonly gallery: string[];
 
   @ApiProperty({
-    type: MetadataProps,
+    type: MetadataProps
   })
   @Prop({ type: MetadataProps, required: true })
   readonly metadata: MetadataProps;
@@ -54,4 +54,4 @@ BrandSchema.method('toJSON', function () {
   return object;
 });
 
-export { BrandSchema, Brand };
+export { Brand, BrandSchema };

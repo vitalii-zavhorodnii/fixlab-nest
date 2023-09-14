@@ -1,6 +1,6 @@
-import { HydratedDocument, Types, Document } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
+import { Document, HydratedDocument, Types } from 'mongoose';
 
 import MetadataProps from 'shared/metadata-props.schema';
 
@@ -8,19 +8,19 @@ export type IssueDocument = HydratedDocument<Issue>;
 
 class Info {
   @ApiProperty({
-    example: 'Безкоштовна діагностика',
+    example: 'Безкоштовна діагностика'
   })
   @Prop({ type: String })
   diagnostic: string;
 
   @ApiProperty({
-    example: 'Гарантія до 1 місяця',
+    example: 'Гарантія до 1 місяця'
   })
   @Prop({ type: String })
   gaurantee: string;
 
   @ApiProperty({
-    example: 'Ремонт від 3 годин',
+    example: 'Ремонт від 3 годин'
   })
   @Prop({ type: String })
   repair: string;
@@ -31,7 +31,7 @@ class Issue extends Document {
   @ApiProperty({ example: '64ef4383e46e72721c03090e' })
   @Prop({
     type: Types.ObjectId,
-    auto: true,
+    auto: true
   })
   readonly id: string;
 
@@ -76,4 +76,4 @@ IssueSchema.method('toJSON', function () {
   return object;
 });
 
-export { IssueSchema, Issue };
+export { Issue, IssueSchema };

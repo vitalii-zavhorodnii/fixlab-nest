@@ -1,13 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
+
 import {
+  IsArray,
   IsBoolean,
   IsDefined,
-  IsObject,
-  IsString,
-  Length,
-  IsOptional,
   IsNotEmpty,
-  IsArray,
+  IsObject,
+  IsOptional,
+  IsString,
+  Length
 } from 'class-validator';
 
 export class CreateContactDto {
@@ -16,13 +17,13 @@ export class CreateContactDto {
   @IsNotEmpty()
   @IsString()
   @Length(1, 60, {
-    message: 'title required to be 1-60 symbols length',
+    message: 'title required to be 1-60 symbols length'
   })
   area: string;
 
   @ApiProperty({
     example: true,
-    description: 'if False - will not appear on client side',
+    description: 'if False - will not appear on client side'
   })
   @IsOptional()
   @IsBoolean()
@@ -33,7 +34,7 @@ export class CreateContactDto {
   @IsNotEmpty()
   @IsString()
   @Length(1, 120, {
-    message: 'title required to be 1-120 symbols length',
+    message: 'title required to be 1-120 symbols length'
   })
   address: string;
 
@@ -68,7 +69,7 @@ export class CreateContactDto {
   workingDate?: string;
 
   @ApiProperty({
-    example: { lang: 50.44930083819644, lat: 30.523043428894475 },
+    example: { lang: 50.44930083819644, lat: 30.523043428894475 }
   })
   @IsOptional()
   @IsObject()
