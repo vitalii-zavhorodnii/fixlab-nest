@@ -14,6 +14,6 @@ export const FileStorageHelper = (subfolder: string | undefined | null) => {
       const extension = path.parse(file.originalname).ext.toLocaleLowerCase();
 
       cb(null, `${filename}${extension}`);
-    },
+    }
   });
 };

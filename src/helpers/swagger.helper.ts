@@ -10,7 +10,7 @@ export class SwaggerHelper {
       .build();
 
     const document = SwaggerModule.createDocument(app, config, {
-      ignoreGlobalPrefix: true,
+      ignoreGlobalPrefix: true
     });
     SwaggerModule.setup('/doc', app, document);
   }
