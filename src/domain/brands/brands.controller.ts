@@ -4,6 +4,7 @@ import {
   Delete,
   FileTypeValidator,
   Get,
+  NotFoundException,
   Param,
   ParseFilePipe,
   Patch,
@@ -25,7 +26,7 @@ import { FileStorageHelper } from 'helpers/file-storage.helper';
 import { CreateBrandDto } from './dto/create-brand.dto';
 import { UpdateBrandDto } from './dto/update-brand.dto';
 
-import { ROUTES, SERVE_FOLDER } from 'constants/routes.constants';
+import { PUBLIC_FOLDER, ROUTES } from 'constants/routes.constants';
 
 @ApiTags(ROUTES.brands)
 @Controller(ROUTES.brands)
@@ -37,7 +38,7 @@ export class BrandsController {
   @Public()
   @Get('')
   public async findAllActiveBrands() {
-    return await this.brandsService.findByQuery({ isActive: true });
+    return await this.brandsService.findAllByQuery({ isActive: true });
   }
 
   @ApiOperation({ summary: 'Client: get brand by slug' })
@@ -45,7 +46,13 @@ export class BrandsController {
   @Public()
   @Get('find-by-slug/:slug')
   public async findBySlug(@Param('slug') slug: string) {
-    return await this.brandsService.findBySlug(slug);
+    const result = await this.brandsService.findOneByQuery({ slug });
+
+    if (!result) {
+      throw new NotFoundException(`Brand with slug "${slug}" was not found`);
+    }
+
+    return result;
   }
 
   @ApiOperation({ summary: 'get Brands data, auth reqiured*' })
@@ -60,7 +67,7 @@ export class BrandsController {
   @ApiResponse({ status: 404, description: 'Brands was not found' })
   @Get('/:id')
   public async findBrandById(@Param('id') id: string) {
-    return await this.brandsService.findById(id);
+    return await this.brandsService.findOneById(id);
   }
 
   @ApiOperation({ summary: 'create new Brand' })
@@ -100,7 +107,7 @@ export class BrandsController {
     )
     icon: Express.Multer.File
   ) {
-    const filePath = `/${SERVE_FOLDER}/${ROUTES.brands}/${icon.filename}`;
+    const filePath = `/${PUBLIC_FOLDER}/${ROUTES.brands}/${icon.filename}`;
 
     await this.brandsService.update(id, { icon: filePath });
 
@@ -111,8 +118,8 @@ export class BrandsController {
   @ApiResponse({ status: 204 })
   @ApiResponse({ status: 404, description: 'Brand was not found' })
   @Delete('/:id')
-  public async deleteBrand(@Param('id') id: string) {
-    await this.brandsService.delete(id);
+  public async removeBrand(@Param('id') id: string) {
+    await this.brandsService.remove(id);
 
     return { status: 204, result: 'success' };
   }

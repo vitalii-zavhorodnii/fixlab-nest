@@ -18,38 +18,35 @@ class Brand extends Document {
   })
   readonly id: string;
 
-  @ApiProperty({ example: true })
-  @Prop({ type: Boolean, default: false, required: false })
-  readonly isActive: boolean;
-
   @ApiProperty({ example: 'apple' })
-  @Prop({ type: String, unique: true, set: (v: string) => v?.toLowerCase() })
+  @Prop({
+    type: String,
+    unique: true,
+    required: true,
+    set: (v: string) => v?.toLowerCase()
+  })
   readonly slug: string;
 
+  @ApiProperty({ example: true })
+  @Prop({ type: Boolean, default: false })
+  readonly isActive: boolean;
+
   @ApiProperty({ example: 'Apple' })
-  @Prop({ type: String })
+  @Prop({ type: String, required: true })
   readonly title: string;
 
   @ApiProperty({ example: 'public/brands/icon.svg' })
-  @Prop({ type: String, required: false, default: null })
+  @Prop({ type: String, default: null })
   readonly icon: string;
 
-  @ApiProperty({ example: 'public/brands/image.svg' })
-  @Prop({ type: String, required: false, default: null })
-  readonly image: string;
-
   @ApiProperty({ example: 'Reparing Apple phones...' })
-  @Prop({ type: String, required: false, default: null })
+  @Prop({ type: String })
   readonly article: string;
-
-  @ApiProperty({ example: 'public/brands/image.svg', isArray: true })
-  @Prop({ type: [String], required: false, default: null })
-  readonly gallery: Array<string>;
 
   @ApiProperty({
     type: MetadataProps
   })
-  @Prop({ type: MetadataProps, required: true })
+  @Prop({ type: MetadataProps })
   readonly metadata: MetadataProps;
 }
 

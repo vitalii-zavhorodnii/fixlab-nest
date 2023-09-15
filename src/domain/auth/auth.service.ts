@@ -24,7 +24,7 @@ export class AuthService {
   }
 
   public async validatePassword({ login, password }: LoginDto): Promise<User> {
-    const user = await this.usersService.findUserByLogin(login);
+    const user = await this.usersService.findOneWithPassword(login);
 
     if (!user) throw new NotFoundException('User was not found');
 

@@ -6,7 +6,9 @@ import { Issue } from './schemas/issue.schema';
 
 @Injectable()
 export class IssuesService {
-  constructor(@InjectModel(Issue.name) private issueModel: Model<Issue>) {}
+  constructor(
+    @InjectModel(Issue.name) private readonly issueModel: Model<Issue>
+  ) {}
 
   public async findAll() {
     const issues = await this.issueModel.find();

@@ -32,11 +32,11 @@ class Contact extends Document {
   readonly area: string;
 
   @ApiProperty({ example: 'Саперно-Слобідська, 10' })
-  @Prop({ type: String })
+  @Prop({ type: String, required: true })
   readonly address: string;
 
   @ApiProperty({ example: 'Вхід через супермаркет ВЕЛМАРТ' })
-  @Prop({ type: String })
+  @Prop({ type: String, required: true })
   readonly comment: string;
 
   @ApiProperty({ example: ['Мінська', 'Оболонь'] })
@@ -44,15 +44,15 @@ class Contact extends Document {
   readonly subways: Array<string>;
 
   @ApiProperty({ example: ['+38 050 227 27 28', '+38 050 227 27 30'] })
-  @Prop({ type: [String] })
+  @Prop({ type: [String], required: true })
   readonly phones: Array<string>;
 
   @ApiProperty({ example: '10:00 - 19:30' })
-  @Prop({ type: String })
+  @Prop({ type: String, required: true })
   readonly workingTime: string;
 
   @ApiProperty({ example: 'нд - вихідний' })
-  @Prop({ type: String })
+  @Prop({ type: String, required: true })
   readonly workingDate: string;
 
   @ApiProperty({ type: Coords })

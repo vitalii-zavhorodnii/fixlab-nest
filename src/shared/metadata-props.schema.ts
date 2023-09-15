@@ -3,21 +3,21 @@ import { ApiProperty } from '@nestjs/swagger';
 
 class MetadataProps {
   @ApiProperty({
-    example: 'seo title'
+    example: 'Reliable Maintenance and Restoration'
   })
-  @Prop({ type: String })
+  @Prop({ type: String, required: true })
   readonly title: string;
 
   @ApiProperty({
-    example: 'seo description'
+    example: 'We offer high-quality...'
   })
-  @Prop({ type: String })
+  @Prop({ type: String, required: true })
   readonly description: string;
 
   @ApiProperty({
-    example: 'seo keywords'
+    example: 'repair, maintenance'
   })
-  @Prop({ type: String })
+  @Prop({ type: String, required: true })
   readonly keywords: string;
 }
 

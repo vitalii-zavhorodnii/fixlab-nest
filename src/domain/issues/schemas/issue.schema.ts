@@ -11,19 +11,19 @@ class Info {
     example: 'Безкоштовна діагностика'
   })
   @Prop({ type: String })
-  diagnostic: string;
+  readonly diagnostic: string;
 
   @ApiProperty({
     example: 'Гарантія до 1 місяця'
   })
   @Prop({ type: String })
-  gaurantee: string;
+  readonly gaurantee: string;
 
   @ApiProperty({
     example: 'Ремонт від 3 годин'
   })
   @Prop({ type: String })
-  repair: string;
+  readonly repair: string;
 }
 
 @Schema({ versionKey: false })

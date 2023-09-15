@@ -29,7 +29,7 @@ export class ContactsController {
   @Public()
   @Get('')
   public async findAllActiveContacts() {
-    return await this.contactsService.findByQuery({ isActive: true });
+    return await this.contactsService.findAllByQuery({ isActive: true });
   }
 
   @ApiOperation({ summary: 'find all Contacts' })
@@ -44,14 +44,6 @@ export class ContactsController {
   @Post('')
   public async create(@Body() dto: CreateContactDto) {
     return await this.contactsService.create(dto);
-  }
-
-  @ApiOperation({ summary: 'find Contact by ID' })
-  @ApiResponse({ status: 200, type: Contact })
-  @ApiResponse({ status: 404, description: 'Contact was not found' })
-  @Get('/:id')
-  public async findOne(@Param('id') id: string) {
-    return await this.contactsService.findById(id);
   }
 
   @ApiOperation({ summary: 'update existing Contact by ID' })

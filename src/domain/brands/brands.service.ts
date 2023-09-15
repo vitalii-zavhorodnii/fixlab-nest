@@ -13,31 +13,23 @@ import { UpdateBrandDto } from './dto/update-brand.dto';
 
 @Injectable()
 export class BrandsService {
-  constructor(@InjectModel(Brand.name) private brandModel: Model<Brand>) {}
+  constructor(
+    @InjectModel(Brand.name) private readonly brandModel: Model<Brand>
+  ) {}
 
   public async findAll(): Promise<Brand[]> {
     return await this.brandModel.find();
   }
 
-  public async findByQuery(query: UpdateBrandDto): Promise<Brand[]> {
+  public async findAllByQuery(query: UpdateBrandDto): Promise<Brand[]> {
     return await this.brandModel.find(query);
   }
 
-  public async findOneByQuery(query: UpdateBrandDto): Promise<Brand> {
-    return await this.brandModel.findOne(query);
+  public async findOneByQuery(query: UpdateBrandDto): Promise<Brand[]> {
+    return await this.brandModel.find(query);
   }
 
-  public async findBySlug(slug: string): Promise<Brand> {
-    const brand = await this.brandModel.findOne({ slug });
-
-    if (!brand) {
-      throw new NotFoundException(`Brand with slug "${slug}" was not found`);
-    }
-
-    return brand;
-  }
-
-  public async findById(id: string): Promise<Brand> {
+  public async findOneById(id: string): Promise<Brand> {
     if (!Types.ObjectId.isValid(id)) {
       throw new NotFoundException(`Incorrect ID - ${id}`);
     }
@@ -61,17 +53,13 @@ export class BrandsService {
     }
 
     const createdBrand = await new this.brandModel(dto).save();
-    const brand = await this.findById(createdBrand._id);
+    const brand = await this.findOneById(createdBrand._id);
 
     return brand;
   }
 
   public async update(id: string, dto: UpdateBrandDto): Promise<Brand> {
-    const foundBrand = await this.findById(id);
-
-    if (!foundBrand) {
-      throw new NotFoundException(`Brand with ID ${id} was not found`);
-    }
+    await this.findOneById(id);
 
     const brand = await this.brandModel.findByIdAndUpdate(id, dto, {
       new: true
@@ -80,7 +68,7 @@ export class BrandsService {
     return brand;
   }
 
-  public async delete(id: string): Promise<Brand> {
+  public async remove(id: string): Promise<Brand> {
     if (!Types.ObjectId.isValid(id)) {
       throw new NotFoundException(`Incorrect ID - ${id}`);
     }

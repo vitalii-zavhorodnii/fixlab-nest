@@ -18,24 +18,33 @@ class Gadget extends Document {
   })
   readonly id: string;
 
-  @ApiProperty({ example: 'Apple' })
-  @Prop({ type: String })
-  readonly title: string;
-
-  @ApiProperty({ example: 'Саперно-Слобідська, 10' })
-  @Prop({ type: String })
-  readonly description: string;
-
   @ApiProperty({ example: 'apple' })
-  @Prop({ type: String, unique: true, set: (v: string) => v?.toLowerCase() })
+  @Prop({
+    type: String,
+    unique: true,
+    required: true,
+    set: (v: string) => v?.toLowerCase()
+  })
   readonly slug: string;
 
-  @ApiProperty({ example: 'public/brands/image.svg' })
-  @Prop({ type: String, required: false, default: null })
+  @ApiProperty({ example: true })
+  @Prop({ type: Boolean, default: false })
+  readonly isActive: boolean;
+
+  @ApiProperty({ example: 'Apple' })
+  @Prop({ type: String, required: true })
+  readonly title: string;
+
+  @ApiProperty({ example: 'На ринку цифрової...' })
+  @Prop({ type: String, required: true })
+  readonly description: string;
+
+  @ApiProperty({ example: 'public/gadget/image.svg' })
+  @Prop({ type: String, default: null })
   readonly image: string;
 
-  @ApiProperty({ example: 'public/brands/image.svg', isArray: true })
-  @Prop({ type: [String], required: false, default: null })
+  @ApiProperty({ example: 'public/gadget/image.svg', isArray: true })
+  @Prop({ type: [String], default: null })
   readonly gallery: Array<string>;
 
   @ApiProperty({
@@ -50,9 +59,7 @@ class Gadget extends Document {
   })
   @Prop({ type: [{ type: Types.ObjectId, ref: Brand.name }] })
   @Type(() => Brand)
-  readonly brands: Brand;
-
-  readonly issues: string;
+  readonly brands: Array<Brand>;
 }
 
 const GadgetSchema = SchemaFactory.createForClass(Gadget);

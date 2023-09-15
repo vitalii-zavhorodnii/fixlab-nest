@@ -8,5 +8,5 @@ export const ROUTES = {
   issues: 'issues'
 };
 
-export const SERVE_FOLDER = 'public';
+export const PUBLIC_FOLDER = 'public';
 export const PREFIX = 'api';

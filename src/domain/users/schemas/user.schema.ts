@@ -14,22 +14,32 @@ class User extends Document {
   readonly id: string;
 
   @ApiProperty({ example: true })
-  @Prop({ type: Boolean, default: true, required: false })
+  @Prop({ type: Boolean, default: true })
   readonly isActive: boolean;
 
   @ApiProperty({ example: 'admin' })
-  @Prop({ type: String, unique: true, set: (v: string) => v?.toLowerCase() })
+  @Prop({
+    type: String,
+    unique: true,
+    required: true,
+    set: (v: string) => v?.toLowerCase()
+  })
   readonly login: string;
 
   @ApiProperty({ example: 'admin@email.com' })
-  @Prop({ type: String, unique: true, set: (v: string) => v?.toLowerCase() })
+  @Prop({
+    type: String,
+    unique: true,
+    required: true,
+    set: (v: string) => v?.toLowerCase()
+  })
   readonly email: string;
 
-  @Prop({ type: String })
+  @Prop({ type: String, required: true })
   readonly password: string;
 
   @ApiProperty({ example: 'Admin' })
-  @Prop({ type: String })
+  @Prop({ type: String, required: true })
   readonly name: string;
 }
 

@@ -7,12 +7,27 @@ import { User } from './schemas/user.schema';
 import { PasswordEncryptHelper } from 'helpers/password-encrypt.helper';
 
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>
   ) {}
+
+  public async findAll(): Promise<User[]> {
+    const users = await this.userModel.find().select('-password');
+
+    return users;
+  }
+
+  public async findOneByQuery(query: UpdateUserDto): Promise<User> {
+    return await this.userModel.findOne(query).select('-password');
+  }
+
+  public async findOneWithPassword(login: string): Promise<User> {
+    return await this.userModel.findOne({ login });
+  }
 
   public async create(dto: CreateUserDto): Promise<User> {
     const password = await PasswordEncryptHelper(dto.password);
@@ -25,45 +40,28 @@ export class UsersService {
     return user;
   }
 
-  public async findUserByQuery(query: {
-    password?: string;
-    login?: string;
-  }): Promise<User> {
-    const user = await this.userModel.findOne(query).select('-password');
-
-    if (!user) {
-      throw new NotFoundException(
-        `User with login "${query.login}" was not found`
-      );
-    }
-
-    return user;
-  }
-
-  public async findUserByLogin(login: string): Promise<User> {
-    const user = await this.userModel.findOne({ login });
-
-    if (!user) {
-      throw new NotFoundException(`User with login "${login}" was not found`);
-    }
-
-    return user;
-  }
-
-  public async findById(id: string): Promise<User> {
+  public async update(id: string, dto: UpdateUserDto): Promise<User> {
     const user = await this.userModel.findById(id);
 
     if (!user) {
-      throw new NotFoundException(`User with ID "${id}" was not found`);
+      throw new NotFoundException(`User with ID ${id} was not found`);
     }
 
-    return user;
-  }
+    const password = dto.password
+      ? await PasswordEncryptHelper(dto.password)
+      : user.password;
 
-  public async findAll(): Promise<User[]> {
-    const users = await this.userModel.find().select('-password');
+    const updatedUser = await this.userModel
+      .findByIdAndUpdate(
+        id,
+        { ...dto, password },
+        {
+          new: true
+        }
+      )
+      .select('-password');
 
-    return users;
+    return updatedUser;
   }
 
   public async remove(id: string) {
@@ -74,7 +72,7 @@ export class UsersService {
     const user = await this.userModel.findByIdAndDelete(id);
 
     if (!user) {
-      throw new NotFoundException(`Contact User ID ${id} was not found`);
+      throw new NotFoundException(`User ID ${id} was not found`);
     }
 
     return user;

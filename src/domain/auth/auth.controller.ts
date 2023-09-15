@@ -11,7 +11,7 @@ import { ROUTES } from 'constants/routes.constants';
 @ApiTags(ROUTES.auth)
 @Controller(ROUTES.auth)
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
   @ApiOperation({ summary: 'Get token with login and password' })
   @ApiResponse({
@@ -21,7 +21,7 @@ export class AuthController {
   @ApiResponse({ status: 401 })
   @Public()
   @Post('/login')
-  async login(@Body() dto: LoginDto) {
+  public async login(@Body() dto: LoginDto) {
     return await this.authService.login(dto);
   }
 }

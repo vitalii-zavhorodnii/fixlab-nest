@@ -14,32 +14,26 @@ export class ContactsService {
     private readonly contactModel: Model<Contact>
   ) {}
 
-  public async create(dto: CreateContactDto): Promise<Contact> {
-    const createdContact = await new this.contactModel(dto).save();
-
-    return createdContact;
-  }
-
   public async findAll(): Promise<Contact[]> {
     const contacts = await this.contactModel.find();
 
     return contacts;
   }
 
-  public async findByQuery(query: UpdateContactDto): Promise<Contact[]> {
+  public async findAllByQuery(query: UpdateContactDto): Promise<Contact[]> {
     const contacts = await this.contactModel.find({ ...query });
 
     return contacts;
   }
 
-  public async findById(id: string): Promise<Contact> {
-    const contact = await this.contactModel.findById(id);
+  public async create(dto: CreateContactDto): Promise<Contact> {
+    const createdContact = await new this.contactModel(dto).save();
 
-    return contact;
+    return createdContact;
   }
 
   public async update(id: string, dto: UpdateContactDto): Promise<Contact> {
-    const contact = await this.findById(id);
+    const contact = await this.contactModel.findById(id);
 
     if (!contact) {
       throw new NotFoundException(`Contact with ID ${id} was not found`);
