@@ -4,13 +4,13 @@ import { Document, HydratedDocument, Types } from 'mongoose';
 
 import { Type } from 'class-transformer';
 
-import { Gadget } from 'domain/gadgets/schemas/gadget.schema';
+import { Brand } from 'domain/brands/schemas/brand.schema';
 import MetadataProps from 'shared/metadata-props.schema';
 
-export type BrandDocument = HydratedDocument<Brand>;
+export type GadgetDocument = HydratedDocument<Gadget>;
 
-@Schema({ versionKey: false })
-class Brand extends Document {
+@Schema()
+class Gadget extends Document {
   @ApiProperty({ example: '64ef4383e46e72721c03090e' })
   @Prop({
     type: Types.ObjectId,
@@ -18,29 +18,21 @@ class Brand extends Document {
   })
   readonly id: string;
 
-  @ApiProperty({ example: true })
-  @Prop({ type: Boolean, default: false, required: false })
-  readonly isActive: boolean;
+  @ApiProperty({ example: 'Apple' })
+  @Prop({ type: String })
+  readonly title: string;
+
+  @ApiProperty({ example: 'Саперно-Слобідська, 10' })
+  @Prop({ type: String })
+  readonly description: string;
 
   @ApiProperty({ example: 'apple' })
   @Prop({ type: String, unique: true, set: (v: string) => v?.toLowerCase() })
   readonly slug: string;
 
-  @ApiProperty({ example: 'Apple' })
-  @Prop({ type: String })
-  readonly title: string;
-
-  @ApiProperty({ example: 'public/brands/icon.svg' })
-  @Prop({ type: String, required: false, default: null })
-  readonly icon: string;
-
   @ApiProperty({ example: 'public/brands/image.svg' })
   @Prop({ type: String, required: false, default: null })
   readonly image: string;
-
-  @ApiProperty({ example: 'Reparing Apple phones...' })
-  @Prop({ type: String, required: false, default: null })
-  readonly article: string;
 
   @ApiProperty({ example: 'public/brands/image.svg', isArray: true })
   @Prop({ type: [String], required: false, default: null })
@@ -51,14 +43,24 @@ class Brand extends Document {
   })
   @Prop({ type: MetadataProps, required: true })
   readonly metadata: MetadataProps;
+
+  @ApiProperty({
+    type: Brand,
+    isArray: true
+  })
+  @Prop({ type: [{ type: Types.ObjectId, ref: Brand.name }] })
+  @Type(() => Brand)
+  readonly brands: Brand;
+
+  readonly issues: string;
 }
 
-const BrandSchema = SchemaFactory.createForClass(Brand);
+const GadgetSchema = SchemaFactory.createForClass(Gadget);
 
-BrandSchema.method('toJSON', function () {
+GadgetSchema.method('toJSON', function () {
   const { _id, ...object } = this.toObject();
   object.id = _id;
   return object;
 });
 
-export { Brand, BrandSchema };
+export { Gadget, GadgetSchema };

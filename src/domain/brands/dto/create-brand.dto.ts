@@ -55,12 +55,25 @@ export class CreateBrandDto {
   readonly isActive?: boolean;
 
   @ApiProperty({
+    example: 'Reparing Apple phones...',
+    description: 'article'
+  })
+  @IsOptional()
+  @IsDefined()
+  @IsNotEmpty()
+  @IsString()
+  readonly article?: string;
+
+  @ApiProperty({
     type: MetadataDto
   })
+  @IsOptional()
   @IsDefined()
   @IsObject()
   @IsNotEmptyObject()
   @ValidateNested()
   @Type(() => MetadataDto)
-  readonly metadata: MetadataDto;
+  readonly metadata?: MetadataDto;
+
+  readonly icon?: string;
 }

@@ -5,6 +5,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
 import { BrandsModule } from './brands/brands.module';
 import { ContactsModule } from './contacts/contacts.module';
+import { GadgetsModule } from './gadgets/gadgets.module';
+import { IssuesModule } from './issues/issues.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -18,10 +20,12 @@ import { UsersModule } from './users/users.module';
         dbName: 'fixlab-db'
       })
     }),
+    GadgetsModule,
     BrandsModule,
     UsersModule,
     AuthModule,
-    ContactsModule
+    ContactsModule,
+    IssuesModule
   ],
   controllers: [],
   providers: []
