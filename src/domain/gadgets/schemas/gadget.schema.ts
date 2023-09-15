@@ -50,7 +50,7 @@ class Gadget extends Document {
   })
   @Prop({ type: [{ type: Types.ObjectId, ref: Brand.name }] })
   @Type(() => Brand)
-  readonly brands: Array<Brand>;
+  readonly brands: Brand;
 
   readonly issues: string;
 }

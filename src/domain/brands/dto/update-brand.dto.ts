@@ -20,6 +20,7 @@ export class UpdateBrandDto {
     example: 'Apple',
     description: 'Brand title'
   })
+  @IsOptional()
   @IsDefined()
   @IsNotEmpty()
   @IsString()
@@ -32,6 +33,7 @@ export class UpdateBrandDto {
     example: 'We repair Apple gadgets',
     description: 'Brand description'
   })
+  @IsOptional()
   @IsDefined()
   @IsNotEmpty()
   @IsString()
@@ -41,6 +43,7 @@ export class UpdateBrandDto {
     example: 'xiaomi',
     description: 'Brand URL'
   })
+  @IsOptional()
   @IsDefined()
   @IsNotEmpty()
   @IsString()
@@ -58,6 +61,7 @@ export class UpdateBrandDto {
     example: 'Reparing Apple phones...',
     description: 'article'
   })
+  @IsOptional()
   @IsDefined()
   @IsNotEmpty()
   @IsString()
@@ -66,6 +70,7 @@ export class UpdateBrandDto {
   @ApiProperty({
     type: MetadataDto
   })
+  @IsOptional()
   @IsDefined()
   @IsObject()
   @IsNotEmptyObject()
@@ -73,5 +78,5 @@ export class UpdateBrandDto {
   @Type(() => MetadataDto)
   readonly metadata?: MetadataDto;
 
-  icon?: string;
+  readonly icon?: string;
 }
