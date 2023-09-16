@@ -18,7 +18,7 @@ import { PREFIX } from 'constants/routes.constants';
   app.setGlobalPrefix(PREFIX);
 
   app.useGlobalFilters(new MongoErrorsFilter());
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   app.useStaticAssets(join(__dirname, '..', 'public'), {
     prefix: '/public'

@@ -10,6 +10,7 @@ import { Brand } from './schemas/brand.schema';
 
 import { CreateBrandDto } from './dto/create-brand.dto';
 import { UpdateBrandDto } from './dto/update-brand.dto';
+import { UpdateIconBrandDto } from './dto/update-icon-brand.dto';
 
 @Injectable()
 export class BrandsService {
@@ -43,6 +44,16 @@ export class BrandsService {
     return brand;
   }
 
+  public async findAllByIds(ids: string[]) {
+    const objectIds = ids.map((value) => new Types.ObjectId(value));
+
+    const brands = await this.brandModel.find({
+      _id: { $in: objectIds }
+    });
+
+    return brands;
+  }
+
   public async create(dto: CreateBrandDto): Promise<Brand> {
     const foundBrand = await this.brandModel.findOne({ slug: dto.slug });
 
@@ -59,6 +70,16 @@ export class BrandsService {
   }
 
   public async update(id: string, dto: UpdateBrandDto): Promise<Brand> {
+    await this.findOneById(id);
+
+    const brand = await this.brandModel.findByIdAndUpdate(id, dto, {
+      new: true
+    });
+
+    return brand;
+  }
+
+  public async updateIcon(id: string, dto: UpdateIconBrandDto): Promise<Brand> {
     await this.findOneById(id);
 
     const brand = await this.brandModel.findByIdAndUpdate(id, dto, {

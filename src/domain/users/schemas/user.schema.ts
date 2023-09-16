@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { Document, HydratedDocument, Types } from 'mongoose';
 
 export type UserDocument = HydratedDocument<User>;
@@ -35,6 +35,7 @@ class User extends Document {
   })
   readonly email: string;
 
+  @ApiHideProperty()
   @Prop({ type: String, required: true })
   readonly password: string;
 

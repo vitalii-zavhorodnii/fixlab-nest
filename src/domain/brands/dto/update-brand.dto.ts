@@ -77,6 +77,4 @@ export class UpdateBrandDto {
   @ValidateNested()
   @Type(() => MetadataDto)
   readonly metadata?: MetadataDto;
-
-  readonly icon?: string;
 }

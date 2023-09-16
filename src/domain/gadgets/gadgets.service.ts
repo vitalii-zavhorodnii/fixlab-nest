@@ -1,32 +1,43 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   NotFoundException
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 
+import { BrandsService } from 'domain/brands/brands.service';
+
 import { Gadget } from './schemas/gadget.schema';
 
 import { CreateGadgetDto } from './dto/create-gadget.dto';
 import { UpdateGadgetDto } from './dto/update-gadget.dto';
+import { UpdateImageGadgetDto } from './dto/update-image-gadget.dto';
 
 @Injectable()
 export class GadgetsService {
   constructor(
-    @InjectModel(Gadget.name) private readonly gadgetModel: Model<Gadget>
+    @InjectModel(Gadget.name) private readonly gadgetModel: Model<Gadget>,
+    @Inject(BrandsService) private readonly brandsService: BrandsService
   ) {}
 
   public async findAll(): Promise<Gadget[]> {
-    return await this.gadgetModel.find();
+    return await this.gadgetModel.find().populate('brands').select('-isActive');
   }
 
-  public async findAllByQuery(query: UpdateGadgetDto): Promise<Gadget[]> {
-    return await this.gadgetModel.find(query);
+  public async findAllActive(): Promise<Gadget[]> {
+    return await this.gadgetModel
+      .find({ isActive: true })
+      .populate('brands')
+      .select('-isActive');
   }
 
-  public async findOneByQuery(query: UpdateGadgetDto): Promise<Gadget[]> {
-    return await this.gadgetModel.findOne(query);
+  public async findOneByQuery(query: UpdateGadgetDto): Promise<Gadget> {
+    return await this.gadgetModel
+      .findOne(query)
+      .populate('brands')
+      .select('-isActive');
   }
 
   public async findOneById(id: string): Promise<Gadget> {
@@ -34,7 +45,10 @@ export class GadgetsService {
       throw new NotFoundException(`Incorrect ID - ${id}`);
     }
 
-    const gadget = await this.gadgetModel.findById(id);
+    const gadget = await this.gadgetModel
+      .findById(id)
+      .populate('brands')
+      .select('-isActive');
 
     if (!gadget) {
       throw new NotFoundException(`Gadget with ID "${id}" was not found`);
@@ -61,13 +75,46 @@ export class GadgetsService {
   public async update(id: string, dto: UpdateGadgetDto): Promise<Gadget> {
     await this.findOneById(id);
 
+    console.log({ dto });
+
     const updatedGadget = await this.gadgetModel
       .findByIdAndUpdate(id, dto, {
         new: true
       })
-      .populate('brands');
+      .populate('brands')
+      .select('-isActive');
 
     return updatedGadget;
+  }
+
+  public async updateImages(
+    id: string,
+    dto: UpdateImageGadgetDto
+  ): Promise<Gadget> {
+    await this.findOneById(id);
+
+    const gadget = await this.gadgetModel.findByIdAndUpdate(id, dto, {
+      new: true
+    });
+
+    return gadget;
+  }
+
+  public async updateBrandsGadget(id: string, brandIds: string[]) {
+    const brands = await this.brandsService.findAllByIds(brandIds);
+
+    const gadget = await this.gadgetModel
+      .findByIdAndUpdate(
+        id,
+        {
+          brands
+        },
+        { new: true }
+      )
+      .populate('brands')
+      .select('-isActive');
+
+    return gadget;
   }
 
   public async remove(id: string): Promise<Gadget> {

@@ -9,7 +9,7 @@ import MetadataProps from 'shared/metadata-props.schema';
 
 export type GadgetDocument = HydratedDocument<Gadget>;
 
-@Schema()
+@Schema({ versionKey: false })
 class Gadget extends Document {
   @ApiProperty({ example: '64ef4383e46e72721c03090e' })
   @Prop({
@@ -39,6 +39,10 @@ class Gadget extends Document {
   @Prop({ type: String, required: true })
   readonly description: string;
 
+  @ApiProperty({ example: 'public/gadget/icon.svg' })
+  @Prop({ type: String, default: null })
+  readonly icon: string;
+
   @ApiProperty({ example: 'public/gadget/image.svg' })
   @Prop({ type: String, default: null })
   readonly image: string;
@@ -50,7 +54,7 @@ class Gadget extends Document {
   @ApiProperty({
     type: MetadataProps
   })
-  @Prop({ type: MetadataProps, required: true })
+  @Prop({ type: MetadataProps })
   readonly metadata: MetadataProps;
 
   @ApiProperty({

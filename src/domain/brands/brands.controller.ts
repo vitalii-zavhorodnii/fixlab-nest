@@ -109,7 +109,7 @@ export class BrandsController {
   ) {
     const filePath = `/${PUBLIC_FOLDER}/${ROUTES.brands}/${icon.filename}`;
 
-    await this.brandsService.update(id, { icon: filePath });
+    await this.brandsService.updateIcon(id, { icon: filePath });
 
     return filePath;
   }
