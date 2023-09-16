@@ -1,6 +1,14 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import {
+  Prop,
+  Schema,
+  SchemaFactory
+} from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { Document, HydratedDocument, Types } from 'mongoose';
+import {
+  Document,
+  HydratedDocument,
+  Types
+} from 'mongoose';
 
 export type ContactDocument = HydratedDocument<Contact>;
 
@@ -21,7 +29,7 @@ class Contact extends Document {
     type: Types.ObjectId,
     auto: true
   })
-  readonly id: string;
+  readonly _id: string;
 
   @ApiProperty({ example: true })
   @Prop({ type: Boolean, default: false })
@@ -35,7 +43,9 @@ class Contact extends Document {
   @Prop({ type: String, required: true })
   readonly address: string;
 
-  @ApiProperty({ example: 'Вхід через супермаркет ВЕЛМАРТ' })
+  @ApiProperty({
+    example: 'Вхід через супермаркет ВЕЛМАРТ'
+  })
   @Prop({ type: String, required: true })
   readonly comment: string;
 
@@ -43,7 +53,9 @@ class Contact extends Document {
   @Prop({ type: [String] })
   readonly subways: Array<string>;
 
-  @ApiProperty({ example: ['+38 050 227 27 28', '+38 050 227 27 30'] })
+  @ApiProperty({
+    example: ['+38 050 227 27 28', '+38 050 227 27 30']
+  })
   @Prop({ type: [String], required: true })
   readonly phones: Array<string>;
 
@@ -61,11 +73,5 @@ class Contact extends Document {
 }
 
 const ContactSchema = SchemaFactory.createForClass(Contact);
-
-ContactSchema.method('toJSON', function () {
-  const { _id, ...object } = this.toObject();
-  object.id = _id;
-  return object;
-});
 
 export { Contact, ContactSchema };

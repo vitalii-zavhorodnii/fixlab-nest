@@ -1,6 +1,14 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import {
+  Prop,
+  Schema,
+  SchemaFactory
+} from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { Document, HydratedDocument, Types } from 'mongoose';
+import {
+  Document,
+  HydratedDocument,
+  Types
+} from 'mongoose';
 
 import MetadataProps from 'shared/metadata-props.schema';
 
@@ -13,7 +21,7 @@ class Brand extends Document {
     type: Types.ObjectId,
     auto: true
   })
-  readonly id: string;
+  readonly _id: string;
 
   @ApiProperty({ example: 'apple' })
   @Prop({
@@ -48,11 +56,5 @@ class Brand extends Document {
 }
 
 const BrandSchema = SchemaFactory.createForClass(Brand);
-
-BrandSchema.method('toJSON', function () {
-  const { _id, ...object } = this.toObject();
-  object.id = _id;
-  return object;
-});
 
 export { Brand, BrandSchema };

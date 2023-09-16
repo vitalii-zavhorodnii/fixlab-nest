@@ -1,6 +1,17 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
-import { Document, HydratedDocument, Types } from 'mongoose';
+import {
+  Prop,
+  Schema,
+  SchemaFactory
+} from '@nestjs/mongoose';
+import {
+  ApiHideProperty,
+  ApiProperty
+} from '@nestjs/swagger';
+import {
+  Document,
+  HydratedDocument,
+  Types
+} from 'mongoose';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -11,7 +22,7 @@ class User extends Document {
     type: Types.ObjectId,
     auto: true
   })
-  readonly id: string;
+  readonly _id: string;
 
   @ApiProperty({ example: true })
   @Prop({ type: Boolean, default: true })
@@ -45,11 +56,5 @@ class User extends Document {
 }
 
 const UserSchema = SchemaFactory.createForClass(User);
-
-UserSchema.method('toJSON', function () {
-  const { _id, ...object } = this.toObject();
-  object.id = _id;
-  return object;
-});
 
 export { User, UserSchema };

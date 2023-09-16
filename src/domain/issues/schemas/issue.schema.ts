@@ -1,6 +1,14 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import {
+  Prop,
+  Schema,
+  SchemaFactory
+} from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { Document, HydratedDocument, Types } from 'mongoose';
+import {
+  Document,
+  HydratedDocument,
+  Types
+} from 'mongoose';
 
 import MetadataProps from 'shared/metadata-props.schema';
 
@@ -33,14 +41,18 @@ class Issue extends Document {
     type: Types.ObjectId,
     auto: true
   })
-  readonly id: string;
+  readonly _id: string;
 
   @ApiProperty({ example: true })
   @Prop({ type: Boolean, default: false })
   readonly isActive: boolean;
 
   @ApiProperty({ example: 'diagnostic' })
-  @Prop({ type: String, unique: true, set: (v: string) => v?.toLowerCase() })
+  @Prop({
+    type: String,
+    unique: true,
+    set: (v: string) => v?.toLowerCase()
+  })
   readonly slug: string;
 
   @ApiProperty({ example: 'Diagnostic' })
@@ -51,13 +63,13 @@ class Issue extends Document {
   @Prop({ type: String })
   readonly description: string;
 
-  @ApiProperty({ example: 'Так виявляються приховані..' })
-  @Prop({ type: [String] })
-  readonly images: Array<string>;
-
   @ApiProperty({ example: 'від 200 грн' })
   @Prop({ type: String })
   readonly price: string;
+
+  @ApiProperty({ example: 'Так виявляються приховані..' })
+  @Prop({ type: [String] })
+  readonly images: Array<string>;
 
   @ApiProperty({ type: MetadataProps })
   @Prop({ _id: false, type: MetadataProps })
@@ -69,11 +81,5 @@ class Issue extends Document {
 }
 
 const IssueSchema = SchemaFactory.createForClass(Issue);
-
-IssueSchema.method('toJSON', function () {
-  const { _id, ...object } = this.toObject();
-  object.id = _id;
-  return object;
-});
 
 export { Issue, IssueSchema };
