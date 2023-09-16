@@ -20,12 +20,12 @@ import { UsersModule } from './users/users.module';
         dbName: 'fixlab-db'
       })
     }),
-    GadgetsModule,
-    BrandsModule,
     UsersModule,
     AuthModule,
-    ContactsModule,
-    IssuesModule
+    GadgetsModule,
+    IssuesModule,
+    BrandsModule,
+    ContactsModule
   ],
   controllers: [],
   providers: []

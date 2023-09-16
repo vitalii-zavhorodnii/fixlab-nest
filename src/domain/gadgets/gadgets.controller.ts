@@ -43,6 +43,7 @@ export class GadgetsController {
 
   @ApiOperation({ summary: 'No-auth* get Gadget by slug' })
   @ApiResponse({ status: 200, type: Gadget, isArray: true })
+  @ApiResponse({ status: 404, description: 'Gadget was not found' })
   @Public()
   @Get('find-by-slug/:slug')
   public async findBySlug(@Param('slug') slug: string) {
