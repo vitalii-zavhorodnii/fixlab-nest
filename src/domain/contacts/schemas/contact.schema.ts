@@ -1,14 +1,6 @@
-import {
-  Prop,
-  Schema,
-  SchemaFactory
-} from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  Document,
-  HydratedDocument,
-  Types
-} from 'mongoose';
+import { Document, HydratedDocument, Types } from 'mongoose';
 
 export type ContactDocument = HydratedDocument<Contact>;
 
@@ -25,11 +17,7 @@ class Coords {
 @Schema({ versionKey: false })
 class Contact extends Document {
   @ApiProperty({ example: '64ef4383e46e72721c03090e' })
-  @Prop({
-    type: Types.ObjectId,
-    auto: true
-  })
-  readonly _id: string;
+  readonly _id: Types.ObjectId;
 
   @ApiProperty({ example: true })
   @Prop({ type: Boolean, default: false })

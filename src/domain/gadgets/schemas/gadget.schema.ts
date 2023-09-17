@@ -1,14 +1,6 @@
-import {
-  Prop,
-  Schema,
-  SchemaFactory
-} from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  Document,
-  HydratedDocument,
-  Types
-} from 'mongoose';
+import { Document, HydratedDocument, Types } from 'mongoose';
 
 import { Type } from 'class-transformer';
 
@@ -21,10 +13,6 @@ export type GadgetDocument = HydratedDocument<Gadget>;
 @Schema({ versionKey: false })
 class Gadget extends Document {
   @ApiProperty({ example: '64ef4383e46e72721c03090e' })
-  @Prop({
-    type: Types.ObjectId,
-    auto: true
-  })
   readonly _id: string;
 
   @ApiProperty({ example: 'apple' })
@@ -32,7 +20,7 @@ class Gadget extends Document {
     type: String,
     unique: true,
     required: true,
-    set: (v: string) => v?.toLowerCase()
+    set: (v: string) => v?.trim().toLowerCase()
   })
   readonly slug: string;
 

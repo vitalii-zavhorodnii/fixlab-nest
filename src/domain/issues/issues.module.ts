@@ -7,10 +7,9 @@ import { IssuesService } from './issues.service';
 import { Issue, IssueSchema } from './schemas/issue.schema';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: Issue.name, schema: IssueSchema }])
-  ],
+  imports: [MongooseModule.forFeature([{ name: Issue.name, schema: IssueSchema }])],
   controllers: [IssuesController],
-  providers: [IssuesService]
+  providers: [IssuesService],
+  exports: [IssuesService]
 })
 export class IssuesModule {}

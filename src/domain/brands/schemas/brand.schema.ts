@@ -28,7 +28,7 @@ class Brand extends Document {
     type: String,
     unique: true,
     required: true,
-    set: (v: string) => v?.toLowerCase()
+    set: (v: string) => v?.trim().toLowerCase()
   })
   readonly slug: string;
 

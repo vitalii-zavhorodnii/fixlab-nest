@@ -13,12 +13,14 @@ import {
   ValidateNested
 } from 'class-validator';
 
+import { Info } from '../schemas/issue.schema';
+
 import { MetadataDto } from 'shared/metadata.dto';
 
-export class CreateGadgetDto {
+export class CreateIssueDto {
   @ApiProperty({
-    example: 'phone',
-    description: 'Gadget URL'
+    example: 'diagnostic',
+    description: 'Issue URL'
   })
   @IsDefined()
   @IsNotEmpty()
@@ -26,8 +28,8 @@ export class CreateGadgetDto {
   readonly slug: string;
 
   @ApiProperty({
-    example: 'Phone',
-    description: 'Gadget title'
+    example: 'Diagnostic',
+    description: 'Issue title'
   })
   @IsDefined()
   @IsNotEmpty()
@@ -38,13 +40,26 @@ export class CreateGadgetDto {
   readonly title: string;
 
   @ApiProperty({
-    example: 'Apple gadgets...',
-    description: 'Gadgets description'
+    example: 'від 200 грн',
+    description: 'Issue fix price'
   })
   @IsDefined()
   @IsNotEmpty()
   @IsString()
-  readonly description: string;
+  @Length(1, 30, {
+    message: 'title required to be 1-30 symbols length'
+  })
+  readonly price: string;
+
+  @ApiProperty({
+    example: 'Diagnostic...',
+    description: 'Issue description'
+  })
+  @IsOptional()
+  @IsDefined()
+  @IsNotEmpty()
+  @IsString()
+  readonly description?: string;
 
   @ApiProperty({
     example: false,
@@ -53,6 +68,15 @@ export class CreateGadgetDto {
   @IsOptional()
   @IsBoolean({ message: 'field must be a boolean' })
   readonly isActive?: boolean;
+
+  @ApiProperty({ type: Info })
+  @IsOptional()
+  @IsDefined()
+  @IsObject()
+  @IsNotEmptyObject()
+  @ValidateNested()
+  @Type(() => Info)
+  readonly info?: Info;
 
   @ApiProperty({
     type: MetadataDto

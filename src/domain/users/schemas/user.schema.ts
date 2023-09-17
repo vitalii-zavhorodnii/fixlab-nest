@@ -1,27 +1,14 @@
-import {
-  Prop,
-  Schema,
-  SchemaFactory
-} from '@nestjs/mongoose';
-import {
-  ApiHideProperty,
-  ApiProperty
-} from '@nestjs/swagger';
-import {
-  Document,
-  HydratedDocument,
-  Types
-} from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
+import { Document, HydratedDocument, Types } from 'mongoose';
+
+import { Exclude } from 'class-transformer';
 
 export type UserDocument = HydratedDocument<User>;
 
 @Schema({ versionKey: false })
 class User extends Document {
   @ApiProperty({ example: '64ef4383e46e72721c03090e' })
-  @Prop({
-    type: Types.ObjectId,
-    auto: true
-  })
   readonly _id: string;
 
   @ApiProperty({ example: true })
@@ -48,6 +35,7 @@ class User extends Document {
 
   @ApiHideProperty()
   @Prop({ type: String, required: true })
+  @Exclude()
   readonly password: string;
 
   @ApiProperty({ example: 'Admin' })

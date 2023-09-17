@@ -8,6 +8,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 
 import { BrandsService } from 'domain/brands/brands.service';
+import { IssuesService } from 'domain/issues/issues.service';
 
 import { Gadget } from './schemas/gadget.schema';
 
@@ -19,17 +20,19 @@ import { UpdateImageGadgetDto } from './dto/update-image-gadget.dto';
 export class GadgetsService {
   constructor(
     @InjectModel(Gadget.name) private readonly gadgetModel: Model<Gadget>,
-    @Inject(BrandsService) private readonly brandsService: BrandsService
+    @Inject(BrandsService) private readonly brandsService: BrandsService,
+    @Inject(IssuesService) private readonly issuesService: IssuesService
   ) {}
 
   public async findAll(): Promise<Gadget[]> {
-    return await this.gadgetModel.find().populate('brands').select('-isActive');
+    return await this.gadgetModel.find().populate('brands').populate('issues');
   }
 
   public async findAllActive(): Promise<Gadget[]> {
     return await this.gadgetModel
       .find({ isActive: true })
       .populate('brands')
+      .populate('issues')
       .select('-isActive');
   }
 
@@ -37,6 +40,7 @@ export class GadgetsService {
     return await this.gadgetModel
       .findOne(query)
       .populate('brands')
+      .populate('issues')
       .select('-isActive');
   }
 
@@ -48,6 +52,7 @@ export class GadgetsService {
     const gadget = await this.gadgetModel
       .findById(id)
       .populate('brands')
+      .populate('issues')
       .select('-isActive');
 
     if (!gadget) {
@@ -61,9 +66,7 @@ export class GadgetsService {
     const foundGadget = await this.gadgetModel.findOne({ slug: dto.slug });
 
     if (foundGadget) {
-      throw new BadRequestException(
-        `Gadget with slug "${dto.slug}" already exists`
-      );
+      throw new BadRequestException(`Gadget with slug "${dto.slug}" already exists`);
     }
 
     const createdGadget = await new this.gadgetModel(dto).save();
@@ -75,32 +78,32 @@ export class GadgetsService {
   public async update(id: string, dto: UpdateGadgetDto): Promise<Gadget> {
     await this.findOneById(id);
 
-    console.log({ dto });
-
     const updatedGadget = await this.gadgetModel
       .findByIdAndUpdate(id, dto, {
         new: true
       })
       .populate('brands')
+      .populate('issues')
       .select('-isActive');
 
     return updatedGadget;
   }
 
-  public async updateImages(
-    id: string,
-    dto: UpdateImageGadgetDto
-  ): Promise<Gadget> {
+  public async updateImages(id: string, dto: UpdateImageGadgetDto): Promise<Gadget> {
     await this.findOneById(id);
 
-    const gadget = await this.gadgetModel.findByIdAndUpdate(id, dto, {
-      new: true
-    });
+    const gadget = await this.gadgetModel
+      .findByIdAndUpdate(id, dto, {
+        new: true
+      })
+      .populate('brands')
+      .populate('issues')
+      .select('-isActive');
 
     return gadget;
   }
 
-  public async updateBrandsGadget(id: string, brandIds: string[]) {
+  public async updateBrandsGadget(id: string, brandIds: string[]): Promise<Gadget> {
     const brands = await this.brandsService.findAllByIds(brandIds);
 
     const gadget = await this.gadgetModel
@@ -112,6 +115,30 @@ export class GadgetsService {
         { new: true }
       )
       .populate('brands')
+      .populate('issues')
+      .select('-isActive');
+
+    return gadget;
+  }
+
+  public async updateIssueGadget(
+    gadgetId: string,
+    issueId: string,
+    action: 'push' | 'pull'
+  ): Promise<Gadget> {
+    await this.findOneById(gadgetId);
+    const issue = await this.issuesService.findOneById(issueId);
+
+    const modifier = () => {
+      if (action === 'push') return { $push: { issues: issue } };
+      if (action === 'pull') return { $pull: { issues: issue } };
+      return { $set: { issues: issue } };
+    };
+
+    const gadget = await this.gadgetModel
+      .findByIdAndUpdate(gadgetId, modifier(), { new: true })
+      .populate('brands')
+      .populate('issues')
       .select('-isActive');
 
     return gadget;
