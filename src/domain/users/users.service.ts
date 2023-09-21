@@ -86,14 +86,9 @@ export class UsersService {
 
   public async createFirstAdmin(key: string, dto: CreateUserDto): Promise<User> {
     const originalKey = this.configService.get<string>('D_ADMIN_KEY');
-
-    if (key !== originalKey) {
-      throw new NotAcceptableException();
-    }
-
     const users = await this.userModel.find();
 
-    if (users.length > 0) {
+    if (users.length > 0 || key !== originalKey || !originalKey) {
       throw new NotAcceptableException();
     }
 
