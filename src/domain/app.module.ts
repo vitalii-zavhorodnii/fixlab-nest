@@ -17,7 +17,7 @@ import { UsersModule } from './users/users.module';
       inject: [ConfigService],
       useFactory: async (config: ConfigService) => ({
         uri: config.get<string>('MONGO_DB_LINK'),
-        dbName: 'fixlab-db'
+        dbName: config.get<string>('MONGO_DB_NAME')
       })
     }),
     UsersModule,

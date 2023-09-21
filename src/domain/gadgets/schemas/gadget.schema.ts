@@ -15,7 +15,7 @@ class Gadget extends Document {
   @ApiProperty({ example: '64ef4383e46e72721c03090e' })
   readonly _id: string;
 
-  @ApiProperty({ example: 'apple' })
+  @ApiProperty({ example: 'phone' })
   @Prop({
     type: String,
     unique: true,
@@ -28,21 +28,17 @@ class Gadget extends Document {
   @Prop({ type: Boolean, default: false })
   readonly isActive: boolean;
 
-  @ApiProperty({ example: 'Apple' })
+  @ApiProperty({ example: 'Phone' })
   @Prop({ type: String, required: true })
   readonly title: string;
 
-  @ApiProperty({ example: 'На ринку цифрової...' })
+  @ApiProperty({ example: 'We repeair phones..' })
   @Prop({ type: String, required: true })
   readonly description: string;
 
   @ApiProperty({ example: 'public/gadget/icon.svg' })
   @Prop({ type: String, default: null })
   readonly icon: string;
-
-  @ApiProperty({ example: 'public/gadget/image.svg' })
-  @Prop({ type: String, default: null })
-  readonly image: string;
 
   @ApiProperty({
     example: 'public/gadget/image.svg',

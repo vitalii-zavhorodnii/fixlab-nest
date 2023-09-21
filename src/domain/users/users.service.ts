@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotAcceptableException,
+  NotFoundException
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 
@@ -12,7 +17,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectModel(User.name) private readonly userModel: Model<User>
+    @InjectModel(User.name) private readonly userModel: Model<User>,
+    private readonly configService: ConfigService
   ) {}
 
   public async findAll(): Promise<User[]> {
@@ -76,5 +82,23 @@ export class UsersService {
     }
 
     return user;
+  }
+
+  public async createFirstAdmin(key: string, dto: CreateUserDto): Promise<User> {
+    const originalKey = this.configService.get<string>('D_ADMIN_KEY');
+
+    if (key !== originalKey) {
+      throw new NotAcceptableException();
+    }
+
+    const users = await this.userModel.find();
+
+    if (users.length > 0) {
+      throw new NotAcceptableException();
+    }
+
+    const admin = await this.create(dto);
+
+    return admin;
   }
 }

@@ -5,9 +5,11 @@ import {
   Get,
   Param,
   Patch,
-  Post
+  Post,
+  Query
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Public } from 'decorators/public.decorator';
 
 import { UsersService } from './users.service';
 
@@ -58,5 +60,13 @@ export class UsersController {
   @Delete('/:id')
   public async removeUserById(@Param('id') id: string) {
     return await this.usersService.remove(id);
+  }
+
+  @ApiOperation({ summary: 'Create first admin' })
+  @ApiResponse({ status: 204, type: User })
+  @Public()
+  @Get('/init/:key')
+  public async createFirstAdmin(@Param('key') key, @Query() query: CreateUserDto) {
+    return await this.usersService.createFirstAdmin(key, query);
   }
 }
