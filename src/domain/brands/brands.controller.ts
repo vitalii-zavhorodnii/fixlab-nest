@@ -17,6 +17,8 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Public } from 'decorators/public.decorator';
 import { Express } from 'express';
 
+import { ISuccessDelete } from 'interfaces/success-delete.interface';
+
 import { BrandsService } from './brands.service';
 
 import { Brand } from './schemas/brand.schema';
@@ -37,7 +39,7 @@ export class BrandsController {
   @ApiResponse({ status: 200, type: Brand, isArray: true })
   @Public()
   @Get('')
-  public async findAllActiveBrands() {
+  public async findAllActiveBrands(): Promise<Brand[]> {
     return await this.brandsService.findAllByQuery({ isActive: true });
   }
 
@@ -45,7 +47,7 @@ export class BrandsController {
   @ApiResponse({ status: 200, type: Brand, isArray: true })
   @Public()
   @Get('find-by-slug/:slug')
-  public async findBySlug(@Param('slug') slug: string) {
+  public async findBySlug(@Param('slug') slug: string): Promise<Brand> {
     const result = await this.brandsService.findOneByQuery({ slug });
 
     if (!result) {
@@ -58,7 +60,7 @@ export class BrandsController {
   @ApiOperation({ summary: 'get Brands data, auth reqiured*' })
   @ApiResponse({ status: 200, type: Brand, isArray: true })
   @Get('/all')
-  public async findAllBrands() {
+  public async findAllBrands(): Promise<Brand[]> {
     return await this.brandsService.findAll();
   }
 
@@ -66,7 +68,7 @@ export class BrandsController {
   @ApiResponse({ status: 200, type: Brand })
   @ApiResponse({ status: 404, description: 'Brands was not found' })
   @Get('/:id')
-  public async findBrandById(@Param('id') id: string) {
+  public async findBrandById(@Param('id') id: string): Promise<Brand> {
     return await this.brandsService.findOneById(id);
   }
 
@@ -77,7 +79,7 @@ export class BrandsController {
   public async createBrand(
     @Body()
     dto: CreateBrandDto
-  ) {
+  ): Promise<Brand> {
     return await this.brandsService.create(dto);
   }
 
@@ -89,7 +91,7 @@ export class BrandsController {
     @Param('id') id: string,
     @Body()
     dto: UpdateBrandDto
-  ) {
+  ): Promise<Brand> {
     return await this.brandsService.update(id, dto);
   }
 
@@ -106,7 +108,7 @@ export class BrandsController {
       })
     )
     icon: Express.Multer.File
-  ) {
+  ): Promise<string> {
     const filePath = `/${PUBLIC_FOLDER}/${ROUTES.brands}/${icon.filename}`;
 
     await this.brandsService.updateIcon(id, { icon: filePath });
@@ -118,7 +120,7 @@ export class BrandsController {
   @ApiResponse({ status: 204 })
   @ApiResponse({ status: 404, description: 'Brand was not found' })
   @Delete('/:id')
-  public async removeBrand(@Param('id') id: string) {
+  public async removeBrand(@Param('id') id: string): Promise<ISuccessDelete> {
     await this.brandsService.remove(id);
 
     return { status: 204, result: 'success' };

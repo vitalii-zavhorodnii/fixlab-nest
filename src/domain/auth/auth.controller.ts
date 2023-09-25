@@ -21,7 +21,7 @@ export class AuthController {
   @ApiResponse({ status: 401 })
   @Public()
   @Post('/login')
-  public async login(@Body() dto: LoginDto) {
+  public async login(@Body() dto: LoginDto): Promise<string> {
     return await this.authService.login(dto);
   }
 }

@@ -11,6 +11,8 @@ import {
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Public } from 'decorators/public.decorator';
 
+import { ISuccessDelete } from 'interfaces/success-delete.interface';
+
 import { IssuesService } from './issues.service';
 
 import { Issue } from './schemas/issue.schema';
@@ -30,7 +32,7 @@ export class IssuesController {
   })
   @ApiResponse({ status: 200, type: Issue, isArray: true })
   @Get('')
-  public async findAll() {
+  public async findAll(): Promise<Issue[]> {
     return await this.issuesService.findAllActive();
   }
 
@@ -42,7 +44,7 @@ export class IssuesController {
   })
   @Public()
   @Get('find-by-slug/:slug')
-  public async findBySlug(@Param('slug') slug: string) {
+  public async findBySlug(@Param('slug') slug: string): Promise<Issue> {
     const result = await this.issuesService.findOneByQuery({
       slug
     });
@@ -57,7 +59,7 @@ export class IssuesController {
   @ApiOperation({ summary: 'get all Issue data' })
   @ApiResponse({ status: 200, type: Issue, isArray: true })
   @Get('/all')
-  public async findAllIssues() {
+  public async findAllIssues(): Promise<Issue[]> {
     return await this.issuesService.findAll();
   }
 
@@ -71,7 +73,7 @@ export class IssuesController {
   public async createIssue(
     @Body()
     dto: CreateIssueDto
-  ) {
+  ): Promise<Issue> {
     return await this.issuesService.create(dto);
   }
 
@@ -86,7 +88,7 @@ export class IssuesController {
     @Param('id') id: string,
     @Body()
     dto: UpdateIssueDto
-  ) {
+  ): Promise<Issue> {
     return await this.issuesService.update(id, dto);
   }
 
@@ -99,7 +101,7 @@ export class IssuesController {
     description: 'Issue was not found'
   })
   @Delete('/:id')
-  public async remove(@Param('id') id: string) {
+  public async remove(@Param('id') id: string): Promise<ISuccessDelete> {
     await this.issuesService.remove(id);
 
     return { status: 204, result: 'success' };

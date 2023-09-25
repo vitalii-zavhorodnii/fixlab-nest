@@ -1,14 +1,8 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Public } from 'decorators/public.decorator';
+
+import { ISuccessDelete } from 'interfaces/success-delete.interface';
 
 import { ContactsService } from './contacts.service';
 
@@ -28,21 +22,21 @@ export class ContactsController {
   @ApiResponse({ status: 200, type: Contact, isArray: true })
   @Public()
   @Get('')
-  public async findAllActiveContacts() {
+  public async findAllActiveContacts(): Promise<Contact[]> {
     return await this.contactsService.findAllByQuery({ isActive: true });
   }
 
   @ApiOperation({ summary: 'find all Contacts' })
   @ApiResponse({ status: 200, type: Contact, isArray: true })
   @Get('/all')
-  public async findAll() {
+  public async findAll(): Promise<Contact[]> {
     return await this.contactsService.findAll();
   }
 
   @ApiOperation({ summary: 'create new Contact' })
   @ApiResponse({ status: 200, type: Contact })
   @Post('')
-  public async create(@Body() dto: CreateContactDto) {
+  public async create(@Body() dto: CreateContactDto): Promise<Contact> {
     return await this.contactsService.create(dto);
   }
 
@@ -50,7 +44,10 @@ export class ContactsController {
   @ApiResponse({ status: 200, type: Contact })
   @ApiResponse({ status: 404, description: 'Contact was not found' })
   @Patch('/:id')
-  public async update(@Param('id') id: string, @Body() dto: UpdateContactDto) {
+  public async update(
+    @Param('id') id: string,
+    @Body() dto: UpdateContactDto
+  ): Promise<Contact> {
     return await this.contactsService.update(id, dto);
   }
 
@@ -58,7 +55,7 @@ export class ContactsController {
   @ApiResponse({ status: 204 })
   @ApiResponse({ status: 404, description: 'Contact was not found' })
   @Delete('/:id')
-  public async remove(@Param('id') id: string) {
+  public async remove(@Param('id') id: string): Promise<ISuccessDelete> {
     await this.contactsService.remove(id);
 
     return { status: 204, result: 'success' };

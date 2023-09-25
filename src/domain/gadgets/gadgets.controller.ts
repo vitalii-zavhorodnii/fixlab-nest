@@ -16,6 +16,8 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Public } from 'decorators/public.decorator';
 
+import { ISuccessDelete } from 'interfaces/success-delete.interface';
+
 import { GadgetsService } from './gadgets.service';
 
 import { Gadget } from './schemas/gadget.schema';
@@ -37,7 +39,7 @@ export class GadgetsController {
   @ApiResponse({ status: 200, type: Gadget, isArray: true })
   @Public()
   @Get('')
-  public async findAllActiveGadgets() {
+  public async findAllActiveGadgets(): Promise<Gadget[]> {
     return await this.gadetsService.findAllActive();
   }
 
@@ -49,7 +51,7 @@ export class GadgetsController {
   })
   @Public()
   @Get('find-by-slug/:slug')
-  public async findBySlug(@Param('slug') slug: string) {
+  public async findBySlug(@Param('slug') slug: string): Promise<Gadget> {
     const result = await this.gadetsService.findOneByQuery({
       slug
     });
@@ -64,7 +66,7 @@ export class GadgetsController {
   @ApiOperation({ summary: 'get all Gadets data' })
   @ApiResponse({ status: 200, type: Gadget, isArray: true })
   @Get('/all')
-  public async findAllGadgets() {
+  public async findAllGadgets(): Promise<Gadget[]> {
     return await this.gadetsService.findAll();
   }
 
@@ -75,7 +77,7 @@ export class GadgetsController {
     description: 'Gadget was not found'
   })
   @Get('/:id')
-  public async findGadgetById(@Param('id') id: string) {
+  public async findGadgetById(@Param('id') id: string): Promise<Gadget> {
     return await this.gadetsService.findOneById(id);
   }
 
@@ -89,7 +91,7 @@ export class GadgetsController {
   public async createGadget(
     @Body()
     dto: CreateGadgetDto
-  ) {
+  ): Promise<Gadget> {
     return await this.gadetsService.create(dto);
   }
 
@@ -100,7 +102,10 @@ export class GadgetsController {
     description: 'Gadget was not found'
   })
   @Patch('/:id')
-  public async update(@Param('id') id: string, @Body() dto: UpdateGadgetDto) {
+  public async update(
+    @Param('id') id: string,
+    @Body() dto: UpdateGadgetDto
+  ): Promise<Gadget> {
     return await this.gadetsService.update(id, dto);
   }
 
@@ -115,7 +120,7 @@ export class GadgetsController {
     @Param('id') id: string,
     @Body()
     dto: UpdateGadgetDto
-  ) {
+  ): Promise<Gadget> {
     return await this.gadetsService.update(id, dto);
   }
 
@@ -135,7 +140,7 @@ export class GadgetsController {
   public async addBrands(
     @Param('id') id: string,
     @Body() { brandIds }: RelateBrandToGadgetDto
-  ) {
+  ): Promise<Gadget> {
     return await this.gadetsService.updateBrandsGadget(id, brandIds);
   }
 
@@ -155,7 +160,7 @@ export class GadgetsController {
   public async addIssueToGadget(
     @Param('gadgetId') gadgetId: string,
     @Param('issueId') issueId: string
-  ) {
+  ): Promise<Gadget> {
     return await this.gadetsService.updateIssueGadget(gadgetId, issueId, 'push');
   }
 
@@ -175,7 +180,7 @@ export class GadgetsController {
   public async removeIssueToGadget(
     @Param('id') id: string,
     @Param('issueId') issueId: string
-  ) {
+  ): Promise<Gadget> {
     return await this.gadetsService.updateIssueGadget(id, issueId, 'pull');
   }
 
@@ -196,7 +201,7 @@ export class GadgetsController {
       })
     )
     image: Express.Multer.File
-  ) {
+  ): Promise<string> {
     const filePath = `/${PUBLIC_FOLDER}/${ROUTES.brands}/${image.filename}`;
 
     await this.gadetsService.updateImages(id, {
@@ -223,7 +228,7 @@ export class GadgetsController {
       })
     )
     icon: Express.Multer.File
-  ) {
+  ): Promise<string> {
     const filePath = `/${PUBLIC_FOLDER}/${ROUTES.gadgets}/${icon.filename}`;
 
     await this.gadetsService.updateImages(id, {
@@ -242,7 +247,7 @@ export class GadgetsController {
     description: 'Gadget was not found'
   })
   @Delete('/:id')
-  public async removeGadget(@Param('id') id: string) {
+  public async removeGadget(@Param('id') id: string): Promise<ISuccessDelete> {
     await this.gadetsService.remove(id);
 
     return { status: 204, result: 'success' };

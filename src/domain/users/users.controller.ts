@@ -11,6 +11,8 @@ import {
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Public } from 'decorators/public.decorator';
 
+import { ISuccessDelete } from 'interfaces/success-delete.interface';
+
 import { UsersService } from './users.service';
 
 import { User } from './schemas/user.schema';
@@ -28,7 +30,7 @@ export class UsersController {
   @ApiOperation({ summary: 'get all users' })
   @ApiResponse({ status: 200, type: User, isArray: true })
   @Get('')
-  public async findAllUsers() {
+  public async findAllUsers(): Promise<User[]> {
     return await this.usersService.findAll();
   }
 
@@ -39,7 +41,7 @@ export class UsersController {
   public async createuser(
     @Body()
     dto: CreateUserDto
-  ) {
+  ): Promise<User> {
     return await this.usersService.create(dto);
   }
 
@@ -58,15 +60,20 @@ export class UsersController {
   @ApiResponse({ status: 204 })
   @ApiResponse({ status: 404, description: 'User was not found' })
   @Delete('/:id')
-  public async removeUserById(@Param('id') id: string) {
-    return await this.usersService.remove(id);
+  public async removeUserById(@Param('id') id: string): Promise<ISuccessDelete> {
+    await this.usersService.remove(id);
+
+    return { status: 204, result: 'success' };
   }
 
   @ApiOperation({ summary: 'Create first admin' })
   @ApiResponse({ status: 204, type: User })
   @Public()
   @Get('/init/:key')
-  public async createFirstAdmin(@Param('key') key, @Query() query: CreateUserDto) {
+  public async createFirstAdmin(
+    @Param('key') key,
+    @Query() query: CreateUserDto
+  ): Promise<User> {
     return await this.usersService.createFirstAdmin(key, query);
   }
 }
