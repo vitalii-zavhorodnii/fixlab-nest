@@ -1,8 +1,18 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Response as Res
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Public } from 'decorators/public.decorator';
+import { Response } from 'express';
 
-import { ISuccessDelete } from 'interfaces/success-delete.interface';
+import { ISuccessDelete } from 'shared/interfaces/success-delete.interface';
 
 import { ContactsService } from './contacts.service';
 
@@ -18,44 +28,55 @@ import { ROUTES } from 'constants/routes.constants';
 export class ContactsController {
   constructor(private readonly contactsService: ContactsService) {}
 
-  @ApiOperation({ summary: 'find all active Contacts' })
+  @ApiOperation({ summary: 'public, find all active contacts' })
   @ApiResponse({ status: 200, type: Contact, isArray: true })
   @Public()
   @Get('')
-  public async findAllActiveContacts(): Promise<Contact[]> {
-    return await this.contactsService.findAllByQuery({ isActive: true });
+  public async findActiveContacts(): Promise<Contact[]> {
+    return await this.contactsService.findActive();
   }
 
-  @ApiOperation({ summary: 'find all Contacts' })
+  @ApiOperation({ summary: 'find all contacts' })
   @ApiResponse({ status: 200, type: Contact, isArray: true })
   @Get('/all')
-  public async findAll(): Promise<Contact[]> {
-    return await this.contactsService.findAll();
+  public async findAllContacts(@Res() response: Response): Promise<void> {
+    const result: Contact[] = await this.contactsService.findAll();
+
+    response.header('Content-Range', `contacts ${result.length}`);
+    response.send(result);
   }
 
-  @ApiOperation({ summary: 'create new Contact' })
+  @ApiOperation({ summary: 'create new contact' })
   @ApiResponse({ status: 200, type: Contact })
   @Post('')
-  public async create(@Body() dto: CreateContactDto): Promise<Contact> {
+  public async createContact(@Body() dto: CreateContactDto): Promise<Contact> {
     return await this.contactsService.create(dto);
   }
 
-  @ApiOperation({ summary: 'update existing Contact by ID' })
+  @ApiOperation({ summary: 'get contact data by ID' })
   @ApiResponse({ status: 200, type: Contact })
   @ApiResponse({ status: 404, description: 'Contact was not found' })
-  @Patch('/:id')
-  public async update(
+  @Get('/:id')
+  public async findBrandById(@Param('id') id: string): Promise<Contact> {
+    return await this.contactsService.findOneById(id);
+  }
+
+  @ApiOperation({ summary: 'update existing contact by ID' })
+  @ApiResponse({ status: 200, type: Contact })
+  @ApiResponse({ status: 404, description: 'Contact was not found' })
+  @Put('/:id')
+  public async updateContact(
     @Param('id') id: string,
     @Body() dto: UpdateContactDto
   ): Promise<Contact> {
     return await this.contactsService.update(id, dto);
   }
 
-  @ApiOperation({ summary: 'remove permanently Contact by ID' })
+  @ApiOperation({ summary: 'remove permanently contact by ID' })
   @ApiResponse({ status: 204 })
   @ApiResponse({ status: 404, description: 'Contact was not found' })
   @Delete('/:id')
-  public async remove(@Param('id') id: string): Promise<ISuccessDelete> {
+  public async removeContact(@Param('id') id: string): Promise<ISuccessDelete> {
     await this.contactsService.remove(id);
 
     return { status: 204, result: 'success' };

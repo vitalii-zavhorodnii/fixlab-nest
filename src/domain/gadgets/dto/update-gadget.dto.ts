@@ -13,7 +13,7 @@ import {
   ValidateNested
 } from 'class-validator';
 
-import { MetadataDto } from 'shared/metadata.dto';
+import { MetadataDto } from 'shared/dto/metadata.dto';
 
 export class UpdateGadgetDto {
   @ApiProperty({
@@ -67,4 +67,24 @@ export class UpdateGadgetDto {
   @ValidateNested()
   @Type(() => MetadataDto)
   readonly metadata?: MetadataDto;
+
+  @ApiProperty({ example: '64ef4383e46e72721c03090e' })
+  @IsOptional()
+  @IsString()
+  readonly icon?: string;
+
+  @ApiProperty({ example: ['64ef4383e46e72721c03090e'] })
+  @IsOptional()
+  @IsString({ each: true })
+  readonly gallery?: Array<string>;
+
+  @ApiProperty({ example: ['64ef4383e46e72721c03090e'] })
+  @IsOptional()
+  @IsString({ each: true })
+  readonly issues?: Array<string>;
+
+  @ApiProperty({ example: ['64ef4383e46e72721c03090e'] })
+  @IsOptional()
+  @IsString({ each: true })
+  readonly brands?: Array<string>;
 }

@@ -2,11 +2,10 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { Document, HydratedDocument, Types } from 'mongoose';
 
-import { Type } from 'class-transformer';
-
 import { Brand } from 'domain/brands/schemas/brand.schema';
+import { Image } from 'domain/images/schemas/image.schema';
 import { Issue } from 'domain/issues/schemas/issue.schema';
-import MetadataProps from 'shared/metadata-props.schema';
+import { Metadata } from 'shared/schemas/metadata.schema';
 
 export type GadgetDocument = HydratedDocument<Gadget>;
 
@@ -36,42 +35,25 @@ class Gadget extends Document {
   @Prop({ type: String, required: true })
   readonly description: string;
 
-  @ApiProperty({ example: 'public/gadget/icon.svg' })
-  @Prop({ type: String, default: null })
-  readonly icon: string;
+  @ApiProperty({ type: Metadata })
+  @Prop({ type: Metadata })
+  readonly metadata: Metadata;
 
-  @ApiProperty({
-    example: 'public/gadget/image.svg',
-    isArray: true
-  })
-  @Prop({ type: [String], default: null })
-  readonly gallery: Array<string>;
+  @ApiProperty({ type: Image })
+  @Prop({ type: Types.ObjectId, ref: Image.name })
+  readonly icon: Types.ObjectId;
 
-  @ApiProperty({
-    type: MetadataProps
-  })
-  @Prop({ type: MetadataProps })
-  readonly metadata: MetadataProps;
+  @ApiProperty({ type: Image, isArray: true })
+  @Prop({ type: [{ type: Types.ObjectId, ref: Image.name }] })
+  readonly gallery: Array<Types.ObjectId>;
 
-  @ApiProperty({
-    type: Brand,
-    isArray: true
-  })
-  @Prop({
-    type: [{ type: Types.ObjectId, ref: Brand.name }]
-  })
-  @Type(() => Brand)
-  readonly brands: Array<Brand>;
+  @ApiProperty({ type: Brand, isArray: true })
+  @Prop({ type: [{ type: Types.ObjectId, ref: Brand.name }] })
+  readonly brands: Array<Types.ObjectId>;
 
-  @ApiProperty({
-    type: Issue,
-    isArray: true
-  })
-  @Prop({
-    type: [{ type: Types.ObjectId, ref: Issue.name }]
-  })
-  @Type(() => Issue)
-  readonly issues: Array<Issue>;
+  @ApiProperty({ type: Issue, isArray: true })
+  @Prop({ type: [{ type: Types.ObjectId, ref: Issue.name }] })
+  readonly issues: Array<Types.ObjectId>;
 }
 
 const GadgetSchema = SchemaFactory.createForClass(Gadget);

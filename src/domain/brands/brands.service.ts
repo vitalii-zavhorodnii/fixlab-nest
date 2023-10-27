@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 
@@ -6,22 +10,21 @@ import { Brand } from './schemas/brand.schema';
 
 import { CreateBrandDto } from './dto/create-brand.dto';
 import { UpdateBrandDto } from './dto/update-brand.dto';
-import { UpdateIconBrandDto } from './dto/update-icon-brand.dto';
 
 @Injectable()
 export class BrandsService {
   constructor(@InjectModel(Brand.name) private readonly brandModel: Model<Brand>) {}
 
   public async findAll(): Promise<Brand[]> {
-    return await this.brandModel.find();
+    return await this.brandModel.find().populate({ path: 'icon' });
   }
 
-  public async findAllByQuery(query: UpdateBrandDto): Promise<Brand[]> {
-    return await this.brandModel.find(query);
+  public async findActive(): Promise<Brand[]> {
+    return await this.brandModel.find({ isActive: true }).populate({ path: 'icon' });
   }
 
   public async findOneByQuery(query: UpdateBrandDto): Promise<Brand> {
-    return await this.brandModel.findOne(query);
+    return await this.brandModel.findOne(query).populate({ path: 'icon' });
   }
 
   public async findOneById(id: string): Promise<Brand> {
@@ -29,7 +32,7 @@ export class BrandsService {
       throw new NotFoundException(`Incorrect ID - ${id}`);
     }
 
-    const brand = await this.brandModel.findById(id);
+    const brand = await this.brandModel.findById(id).populate({ path: 'icon' });
 
     if (!brand) {
       throw new NotFoundException(`Brand with ID "${id}" was not found`);
@@ -41,9 +44,11 @@ export class BrandsService {
   public async findAllByIds(ids: string[]) {
     const objectIds = ids.map((value) => new Types.ObjectId(value));
 
-    const brands = await this.brandModel.find({
-      _id: { $in: objectIds }
-    });
+    const brands = await this.brandModel
+      .find({
+        _id: { $in: objectIds }
+      })
+      .populate({ path: 'icon' });
 
     return brands;
   }
@@ -52,7 +57,9 @@ export class BrandsService {
     const foundBrand = await this.brandModel.findOne({ slug: dto.slug });
 
     if (foundBrand) {
-      throw new BadRequestException(`Brand with slug "${dto.slug}" already exists`);
+      throw new UnprocessableEntityException(
+        `Brand with slug "${dto.slug}" already exists`
+      );
     }
 
     const createdBrand = await new this.brandModel(dto).save();
@@ -64,19 +71,11 @@ export class BrandsService {
   public async update(id: string, dto: UpdateBrandDto): Promise<Brand> {
     await this.findOneById(id);
 
-    const brand = await this.brandModel.findByIdAndUpdate(id, dto, {
-      new: true
-    });
-
-    return brand;
-  }
-
-  public async updateIcon(id: string, dto: UpdateIconBrandDto): Promise<Brand> {
-    await this.findOneById(id);
-
-    const brand = await this.brandModel.findByIdAndUpdate(id, dto, {
-      new: true
-    });
+    const brand = await this.brandModel
+      .findByIdAndUpdate(id, dto, {
+        new: true
+      })
+      .populate({ path: 'icon' });
 
     return brand;
   }

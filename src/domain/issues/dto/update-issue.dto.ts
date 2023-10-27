@@ -13,9 +13,7 @@ import {
   ValidateNested
 } from 'class-validator';
 
-import { Info } from '../schemas/issue.schema';
-
-import { MetadataDto } from 'shared/metadata.dto';
+import { MetadataDto } from 'shared/dto/metadata.dto';
 
 export class UpdateIssueDto {
   @ApiProperty({
@@ -72,14 +70,15 @@ export class UpdateIssueDto {
   })
   readonly price?: string;
 
-  @ApiProperty({ type: Info })
+  @ApiProperty({
+    example: 'Diagnostic...',
+    description: 'Issue description'
+  })
   @IsOptional()
   @IsDefined()
-  @IsObject()
-  @IsNotEmptyObject()
-  @ValidateNested()
-  @Type(() => Info)
-  readonly info?: Info;
+  @IsNotEmpty()
+  @IsString()
+  readonly info?: string;
 
   @ApiProperty({
     type: MetadataDto
@@ -91,4 +90,14 @@ export class UpdateIssueDto {
   @ValidateNested()
   @Type(() => MetadataDto)
   readonly metadata?: MetadataDto;
+
+  @ApiProperty({ example: '64ef4383e46e72721c03090e' })
+  @IsOptional()
+  @IsString()
+  readonly image?: string;
+
+  @ApiProperty({ example: ['64ef4383e46e72721c03090e'] })
+  @IsOptional()
+  @IsString({ each: true })
+  readonly benefits?: string[];
 }

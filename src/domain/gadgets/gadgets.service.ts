@@ -1,47 +1,47 @@
-import {
-  BadRequestException,
-  Inject,
-  Injectable,
-  NotFoundException
-} from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-
-import { BrandsService } from 'domain/brands/brands.service';
-import { IssuesService } from 'domain/issues/issues.service';
 
 import { Gadget } from './schemas/gadget.schema';
 
 import { CreateGadgetDto } from './dto/create-gadget.dto';
 import { UpdateGadgetDto } from './dto/update-gadget.dto';
-import { UpdateImageGadgetDto } from './dto/update-image-gadget.dto';
 
 @Injectable()
 export class GadgetsService {
   constructor(
-    @InjectModel(Gadget.name) private readonly gadgetModel: Model<Gadget>,
-    @Inject(BrandsService) private readonly brandsService: BrandsService,
-    @Inject(IssuesService) private readonly issuesService: IssuesService
+    @InjectModel(Gadget.name) private readonly gadgetModel: Model<Gadget>
   ) {}
 
   public async findAll(): Promise<Gadget[]> {
-    return await this.gadgetModel.find().populate('brands').populate('issues');
+    return await this.gadgetModel
+      .find()
+      .populate({ path: 'brands', populate: { path: 'icon' } })
+      .populate({
+        path: 'issues',
+        populate: [{ path: 'benefits' }, { path: 'image' }]
+      })
+      .populate({ path: 'icon' })
+      .populate({ path: 'gallery' });
   }
 
-  public async findAllActive(): Promise<Gadget[]> {
+  public async findActive(): Promise<Gadget[]> {
     return await this.gadgetModel
       .find({ isActive: true })
-      .populate('brands')
-      .populate('issues')
-      .select('-isActive');
+      .select('-isActive')
+      .populate({ path: 'icon' });
   }
 
   public async findOneByQuery(query: UpdateGadgetDto): Promise<Gadget> {
     return await this.gadgetModel
       .findOne(query)
-      .populate('brands')
-      .populate('issues')
-      .select('-isActive');
+      .populate({ path: 'brands', populate: { path: 'icon' } })
+      .populate({
+        path: 'issues',
+        populate: [{ path: 'benefits' }, { path: 'image' }]
+      })
+      .populate({ path: 'icon' })
+      .populate({ path: 'gallery' });
   }
 
   public async findOneById(id: string): Promise<Gadget> {
@@ -51,9 +51,13 @@ export class GadgetsService {
 
     const gadget = await this.gadgetModel
       .findById(id)
-      .populate('brands')
-      .populate('issues')
-      .select('-isActive');
+      .populate({ path: 'brands', populate: { path: 'icon' } })
+      .populate({
+        path: 'issues',
+        populate: [{ path: 'benefits' }, { path: 'image' }]
+      })
+      .populate({ path: 'icon' })
+      .populate({ path: 'gallery' });
 
     if (!gadget) {
       throw new NotFoundException(`Gadget with ID "${id}" was not found`);
@@ -82,66 +86,15 @@ export class GadgetsService {
       .findByIdAndUpdate(id, dto, {
         new: true
       })
-      .populate('brands')
-      .populate('issues')
-      .select('-isActive');
+      .populate({ path: 'brands', populate: { path: 'icon' } })
+      .populate({
+        path: 'issues',
+        populate: [{ path: 'benefits' }, { path: 'image' }]
+      })
+      .populate({ path: 'icon' })
+      .populate({ path: 'gallery' });
 
     return updatedGadget;
-  }
-
-  public async updateImages(id: string, dto: UpdateImageGadgetDto): Promise<Gadget> {
-    await this.findOneById(id);
-
-    const gadget = await this.gadgetModel
-      .findByIdAndUpdate(id, dto, {
-        new: true
-      })
-      .populate('brands')
-      .populate('issues')
-      .select('-isActive');
-
-    return gadget;
-  }
-
-  public async updateBrandsGadget(id: string, brandIds: string[]): Promise<Gadget> {
-    const brands = await this.brandsService.findAllByIds(brandIds);
-
-    const gadget = await this.gadgetModel
-      .findByIdAndUpdate(
-        id,
-        {
-          brands
-        },
-        { new: true }
-      )
-      .populate('brands')
-      .populate('issues')
-      .select('-isActive');
-
-    return gadget;
-  }
-
-  public async updateIssueGadget(
-    gadgetId: string,
-    issueId: string,
-    action: 'push' | 'pull'
-  ): Promise<Gadget> {
-    await this.findOneById(gadgetId);
-    const issue = await this.issuesService.findOneById(issueId);
-
-    const modifier = () => {
-      if (action === 'push') return { $push: { issues: issue } };
-      if (action === 'pull') return { $pull: { issues: issue } };
-      return { $set: { issues: issue } };
-    };
-
-    const gadget = await this.gadgetModel
-      .findByIdAndUpdate(gadgetId, modifier(), { new: true })
-      .populate('brands')
-      .populate('issues')
-      .select('-isActive');
-
-    return gadget;
   }
 
   public async remove(id: string): Promise<Gadget> {

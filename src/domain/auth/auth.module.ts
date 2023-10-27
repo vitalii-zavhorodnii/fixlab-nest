@@ -22,13 +22,13 @@ import { AuthGuard } from './guards/auth.guard';
       inject: [ConfigService]
     })
   ],
+  controllers: [AuthController],
   providers: [
     AuthService,
     {
       provide: APP_GUARD,
       useClass: AuthGuard
     }
-  ],
-  controllers: [AuthController]
+  ]
 })
 export class AuthModule {}

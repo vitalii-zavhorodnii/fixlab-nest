@@ -5,7 +5,10 @@ export const ROUTES = {
   users: 'users',
   auth: 'auth',
   contacts: 'contacts',
-  issues: 'issues'
+  issues: 'issues',
+  benefits: 'benefits',
+  images: 'images',
+  articles: 'articles'
 };
 
 export const PUBLIC_FOLDER = 'public';

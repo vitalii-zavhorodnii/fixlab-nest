@@ -1,7 +1,8 @@
 import {
   Injectable,
   NotAcceptableException,
-  NotFoundException
+  NotFoundException,
+  UnprocessableEntityException
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
@@ -36,9 +37,20 @@ export class UsersService {
   }
 
   public async create(dto: CreateUserDto): Promise<User> {
+    const checkedUser = await this.userModel.findOne({ login: dto.login });
+
+    if (checkedUser) {
+      throw new UnprocessableEntityException({
+        statusCode: 422,
+        error: 'Bad Request',
+        message: `User already exists`
+      });
+    }
+
     const password = await PasswordEncryptHelper(dto.password);
 
     const createdUser = await new this.userModel({ ...dto, password }).save();
+
     const user = await this.userModel
       .findOne({ login: createdUser.login })
       .select('-password');

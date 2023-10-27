@@ -15,15 +15,27 @@ export class ContactsService {
   ) {}
 
   public async findAll(): Promise<Contact[]> {
-    const contacts = await this.contactModel.find();
+    const contacts = await this.contactModel.find().populate({ path: 'image' });
 
     return contacts;
   }
 
-  public async findAllByQuery(query: UpdateContactDto): Promise<Contact[]> {
-    const contacts = await this.contactModel.find({ ...query });
+  public async findActive(): Promise<Contact[]> {
+    const contacts = await this.contactModel
+      .find({ isActive: true })
+      .populate({ path: 'image' });
 
     return contacts;
+  }
+
+  public async findOneById(id: string): Promise<Contact> {
+    const contact = await this.contactModel.findById(id).populate({ path: 'image' });
+
+    if (!contact) {
+      throw new NotFoundException(`Contact with ID ${id} was not found`);
+    }
+
+    return contact;
   }
 
   public async create(dto: CreateContactDto): Promise<Contact> {
@@ -43,7 +55,7 @@ export class ContactsService {
       .findByIdAndUpdate(id, dto, {
         new: true
       })
-      .populate('coords');
+      .populate({ path: 'image' });
 
     return updatedContact;
   }

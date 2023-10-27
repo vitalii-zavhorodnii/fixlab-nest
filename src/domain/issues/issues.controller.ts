@@ -5,13 +5,15 @@ import {
   Get,
   NotFoundException,
   Param,
-  Patch,
-  Post
+  Post,
+  Put,
+  Response as Res
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Public } from 'decorators/public.decorator';
+import { Response } from 'express';
 
-import { ISuccessDelete } from 'interfaces/success-delete.interface';
+import { ISuccessDelete } from 'shared/interfaces/success-delete.interface';
 
 import { IssuesService } from './issues.service';
 
@@ -27,16 +29,15 @@ import { ROUTES } from 'constants/routes.constants';
 export class IssuesController {
   constructor(private readonly issuesService: IssuesService) {}
 
-  @ApiOperation({
-    summary: 'No-auth* find all active Issues'
-  })
+  @ApiOperation({ summary: 'public, find all active issues' })
   @ApiResponse({ status: 200, type: Issue, isArray: true })
+  @Public()
   @Get('')
   public async findAll(): Promise<Issue[]> {
     return await this.issuesService.findAllActive();
   }
 
-  @ApiOperation({ summary: 'No-auth* get Gadget by slug' })
+  @ApiOperation({ summary: 'public, get gadget by slug' })
   @ApiResponse({ status: 200, type: Issue, isArray: true })
   @ApiResponse({
     status: 404,
@@ -45,25 +46,37 @@ export class IssuesController {
   @Public()
   @Get('find-by-slug/:slug')
   public async findBySlug(@Param('slug') slug: string): Promise<Issue> {
-    const result = await this.issuesService.findOneByQuery({
+    const issue = await this.issuesService.findOneByQuery({
       slug
     });
 
-    if (!result) {
+    if (!issue) {
       throw new NotFoundException(`Issue with slug "${slug}" was not found`);
     }
 
-    return result;
+    return issue;
   }
 
-  @ApiOperation({ summary: 'get all Issue data' })
+  @ApiOperation({ summary: 'get all issue data' })
   @ApiResponse({ status: 200, type: Issue, isArray: true })
   @Get('/all')
-  public async findAllIssues(): Promise<Issue[]> {
-    return await this.issuesService.findAll();
+  public async findAllIssues(@Res() response: Response): Promise<void> {
+    const result: Issue[] = await this.issuesService.findAll();
+
+    response.header('Content-Range', `issues ${result.length}`);
+    response.send(result);
   }
 
-  @ApiOperation({ summary: 'create new Issue' })
+  @ApiOperation({ summary: 'get issue data by ID' })
+  @ApiResponse({ status: 200, type: Issue })
+  @ApiResponse({ status: 404, description: 'Issue was not found' })
+  @Public()
+  @Get('/:id')
+  public async findIssueById(@Param('id') id: string): Promise<Issue> {
+    return await this.issuesService.findOneById(id);
+  }
+
+  @ApiOperation({ summary: 'create new issue' })
   @ApiResponse({ status: 200, type: Issue })
   @ApiResponse({
     status: 400,
@@ -77,13 +90,13 @@ export class IssuesController {
     return await this.issuesService.create(dto);
   }
 
-  @ApiOperation({ summary: 'update existing Issue by ID' })
+  @ApiOperation({ summary: 'update existing issue by ID' })
   @ApiResponse({ status: 200, type: Issue })
   @ApiResponse({
     status: 404,
     description: 'Issue was not found'
   })
-  @Patch('/:id')
+  @Put('/:id')
   public async updateIssue(
     @Param('id') id: string,
     @Body()
@@ -93,7 +106,7 @@ export class IssuesController {
   }
 
   @ApiOperation({
-    summary: 'remove permanently Issue by ID'
+    summary: 'remove permanently issue by ID'
   })
   @ApiResponse({ status: 204 })
   @ApiResponse({

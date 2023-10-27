@@ -13,7 +13,7 @@ import {
   ValidateNested
 } from 'class-validator';
 
-import { MetadataDto } from 'shared/metadata.dto';
+import { MetadataDto } from 'shared/dto/metadata.dto';
 
 export class UpdateBrandDto {
   @ApiProperty({
@@ -28,16 +28,6 @@ export class UpdateBrandDto {
     message: 'title required to be 1-60 symbols length'
   })
   readonly title?: string;
-
-  @ApiProperty({
-    example: 'We repair Apple gadgets',
-    description: 'Brand description'
-  })
-  @IsOptional()
-  @IsDefined()
-  @IsNotEmpty()
-  @IsString()
-  readonly description?: string;
 
   @ApiProperty({
     example: 'xiaomi',
@@ -77,4 +67,9 @@ export class UpdateBrandDto {
   @ValidateNested()
   @Type(() => MetadataDto)
   readonly metadata?: MetadataDto;
+
+  @ApiProperty({ example: '64ef4383e46e72721c03090e' })
+  @IsOptional()
+  @IsString()
+  readonly icon?: string;
 }

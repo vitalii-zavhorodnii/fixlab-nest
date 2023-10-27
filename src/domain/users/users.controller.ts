@@ -11,7 +11,7 @@ import {
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Public } from 'decorators/public.decorator';
 
-import { ISuccessDelete } from 'interfaces/success-delete.interface';
+import { ISuccessDelete } from 'shared/interfaces/success-delete.interface';
 
 import { UsersService } from './users.service';
 
@@ -38,14 +38,14 @@ export class UsersController {
   @ApiResponse({ status: 200, type: User })
   @ApiResponse({ status: 400, description: 'Incorrect content data' })
   @Post('')
-  public async createuser(
+  public async createUser(
     @Body()
     dto: CreateUserDto
   ): Promise<User> {
     return await this.usersService.create(dto);
   }
 
-  @ApiOperation({ summary: 'update existing Contact by ID' })
+  @ApiOperation({ summary: 'update existing user by ID' })
   @ApiResponse({ status: 200, type: User })
   @ApiResponse({ status: 404, description: 'Contact was not found' })
   @Patch('/:id')
@@ -56,7 +56,7 @@ export class UsersController {
     return await this.usersService.update(id, dto);
   }
 
-  @ApiOperation({ summary: 'remove permanently User by ID' })
+  @ApiOperation({ summary: 'remove permanently user by ID' })
   @ApiResponse({ status: 204 })
   @ApiResponse({ status: 404, description: 'User was not found' })
   @Delete('/:id')
@@ -66,12 +66,12 @@ export class UsersController {
     return { status: 204, result: 'success' };
   }
 
-  @ApiOperation({ summary: 'Create first admin' })
+  @ApiOperation({ summary: 'create first admin' })
   @ApiResponse({ status: 204, type: User })
   @Public()
   @Get('/init/:key')
   public async createFirstAdmin(
-    @Param('key') key,
+    @Param('key') key: string,
     @Query() query: CreateUserDto
   ): Promise<User> {
     return await this.usersService.createFirstAdmin(key, query);

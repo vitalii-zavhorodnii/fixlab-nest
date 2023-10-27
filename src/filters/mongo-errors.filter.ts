@@ -21,6 +21,9 @@ export class MongoErrorsFilter implements ExceptionFilter {
       case 11000:
         return `Database Conflict: Duplicate key error`;
 
+      case 14388:
+        return 'User is not allowed to do action';
+
       default:
         return 'A database error occurred while processing the request.';
     }

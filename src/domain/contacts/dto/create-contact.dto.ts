@@ -4,7 +4,6 @@ import {
   IsArray,
   IsBoolean,
   IsNotEmpty,
-  IsObject,
   IsOptional,
   IsString,
   Length
@@ -59,13 +58,18 @@ export class CreateContactDto {
   @IsString()
   readonly workingDate: string;
 
-  @ApiProperty({
-    example: { lang: 50.44930083819644, lat: 30.523043428894475 }
-  })
+  @ApiProperty({ example: 'https://maps.app.goo.gl/1pi9sxQl' })
   @IsOptional()
-  @IsObject()
-  readonly coords?: {
-    lang: number;
-    lat: number;
-  };
+  @IsString()
+  readonly googleMapLink?: string;
+
+  @ApiProperty({ example: 'https://www.google.com/maps/embed?plugin....' })
+  @IsOptional()
+  @IsString()
+  readonly googlePluginLink?: string;
+
+  @ApiProperty({ example: '64ef4383e46e72721c03090e' })
+  @IsOptional()
+  @IsString()
+  readonly image?: string;
 }

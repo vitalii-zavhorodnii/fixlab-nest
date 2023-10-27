@@ -9,7 +9,6 @@ import { Issue, IssueSchema } from './schemas/issue.schema';
 @Module({
   imports: [MongooseModule.forFeature([{ name: Issue.name, schema: IssueSchema }])],
   controllers: [IssuesController],
-  providers: [IssuesService],
-  exports: [IssuesService]
+  providers: [IssuesService]
 })
 export class IssuesModule {}

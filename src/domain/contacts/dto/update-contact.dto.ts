@@ -4,7 +4,6 @@ import {
   IsArray,
   IsBoolean,
   IsNotEmpty,
-  IsObject,
   IsOptional,
   IsString,
   Length
@@ -17,7 +16,7 @@ export class UpdateContactDto {
   @Length(1, 60, {
     message: 'title required to be 1-60 symbols length'
   })
-  area?: string;
+  readonly area?: string;
 
   @ApiProperty({
     example: true,
@@ -25,7 +24,7 @@ export class UpdateContactDto {
   })
   @IsOptional()
   @IsBoolean()
-  isActive?: boolean;
+  readonly isActive?: boolean;
 
   @ApiProperty({ example: 'Саперно-Слобідська, 10' })
   @IsOptional()
@@ -33,45 +32,50 @@ export class UpdateContactDto {
   @Length(1, 120, {
     message: 'title required to be 1-120 symbols length'
   })
-  address?: string;
+  readonly address?: string;
 
   @ApiProperty({ example: 'Вхід через супермаркет ВЕЛМАРТ' })
   @IsOptional()
   @IsNotEmpty()
   @IsString()
-  comment?: string;
+  readonly comment?: string;
 
   @ApiProperty({ example: ['Мінська', 'Оболонь'] })
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  subways?: Array<string>;
+  readonly subways?: Array<string>;
 
   @ApiProperty({ example: ['+38 050 227 27 28', '+38 050 227 27 30'] })
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  phones?: Array<string>;
+  readonly phones?: Array<string>;
 
   @ApiProperty({ example: '10:00 - 19:30' })
   @IsOptional()
   @IsNotEmpty()
   @IsString()
-  workingTime?: string;
+  readonly workingTime?: string;
 
   @ApiProperty({ example: 'нд - вихідний' })
   @IsOptional()
   @IsNotEmpty()
   @IsString()
-  workingDate?: string;
+  readonly workingDate?: string;
 
-  @ApiProperty({
-    example: { lang: 50.44930083819644, lat: 30.523043428894475 }
-  })
+  @ApiProperty({ example: 'https://maps.app.goo.gl/1pi9sxQl' })
   @IsOptional()
-  @IsObject()
-  coords?: {
-    lang?: number;
-    lat?: number;
-  };
+  @IsString()
+  readonly googleMapLink?: string;
+
+  @ApiProperty({ example: 'https://www.google.com/maps/embed?plugin....' })
+  @IsOptional()
+  @IsString()
+  readonly googlePluginLink?: string;
+
+  @ApiProperty({ example: '64ef4383e46e72721c03090e' })
+  @IsOptional()
+  @IsString()
+  readonly image?: string;
 }

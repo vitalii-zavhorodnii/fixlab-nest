@@ -13,9 +13,17 @@ import {
   ValidateNested
 } from 'class-validator';
 
-import { MetadataDto } from 'shared/metadata.dto';
+import { MetadataDto } from 'shared/dto/metadata.dto';
 
 export class CreateBrandDto {
+  @ApiProperty({
+    example: false,
+    description: 'If false, will not appear on client side lists'
+  })
+  @IsOptional()
+  @IsBoolean({ message: 'field must be a boolean' })
+  readonly isActive?: boolean;
+
   @ApiProperty({
     example: 'Apple',
     description: 'Brand title'
@@ -24,18 +32,9 @@ export class CreateBrandDto {
   @IsNotEmpty()
   @IsString()
   @Length(1, 60, {
-    message: 'title required to be 1-60 symbols length'
+    message: 'required to be 1-60 symbols length'
   })
   readonly title: string;
-
-  @ApiProperty({
-    example: 'We repair Apple gadgets',
-    description: 'Brand description'
-  })
-  @IsDefined()
-  @IsNotEmpty()
-  @IsString()
-  readonly description: string;
 
   @ApiProperty({
     example: 'xiaomi',
@@ -47,14 +46,6 @@ export class CreateBrandDto {
   readonly slug: string;
 
   @ApiProperty({
-    example: false,
-    description: 'If false, will not appear on client side lists'
-  })
-  @IsOptional()
-  @IsBoolean({ message: 'field must be a boolean' })
-  readonly isActive?: boolean;
-
-  @ApiProperty({
     example: 'Reparing Apple phones...',
     description: 'article'
   })
@@ -62,7 +53,7 @@ export class CreateBrandDto {
   @IsDefined()
   @IsNotEmpty()
   @IsString()
-  readonly article?: string;
+  readonly article: string;
 
   @ApiProperty({
     type: MetadataDto
@@ -74,4 +65,9 @@ export class CreateBrandDto {
   @ValidateNested()
   @Type(() => MetadataDto)
   readonly metadata?: MetadataDto;
+
+  @ApiProperty({ example: '64ef4383e46e72721c03090e' })
+  @IsOptional()
+  @IsString()
+  readonly icon?: string;
 }
