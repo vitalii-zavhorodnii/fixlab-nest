@@ -101,7 +101,7 @@ export class IssuesController {
     @Param('id') id: string,
     @Body()
     dto: UpdateIssueDto
-  ): Promise<Issue> {
+  ): Promise<Issue | null> {
     return await this.issuesService.update(id, dto);
   }
 

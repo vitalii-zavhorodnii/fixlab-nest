@@ -9,27 +9,19 @@ class Image extends Document {
   @ApiProperty({ example: '64ef4383e46e72721c03090e' })
   readonly _id: string;
 
-  @ApiProperty({
-    example: 'buffer......'
-  })
+  @ApiProperty({ example: 'buffer......' })
   @Prop({ type: Object })
   readonly file: Express.Multer.File;
 
-  @ApiProperty({
-    example: '/public/image_path'
-  })
+  @ApiProperty({ example: '/public/image_path' })
   @Prop({ type: String })
   readonly src: string;
 
-  @ApiProperty({
-    example: 'Alt image'
-  })
+  @ApiProperty({ example: 'Alt image' })
   @Prop({ type: String })
   readonly alt: string;
 
-  @ApiProperty({
-    example: 'Type image'
-  })
+  @ApiProperty({ example: 'Type image' })
   @Prop({ type: String })
   readonly type: string;
 }

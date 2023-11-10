@@ -9,7 +9,6 @@ import {
   IsObject,
   IsOptional,
   IsString,
-  Length,
   ValidateNested
 } from 'class-validator';
 
@@ -40,9 +39,6 @@ export class UpdateArticleDto {
   @IsDefined()
   @IsNotEmpty()
   @IsString()
-  @Length(1, 60, {
-    message: 'required to be 1-60 symbols length'
-  })
   readonly title?: string;
 
   @ApiProperty({ example: 'Reparing Apple phones...' })

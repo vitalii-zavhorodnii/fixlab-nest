@@ -68,7 +68,7 @@ export class ContactsController {
   public async updateContact(
     @Param('id') id: string,
     @Body() dto: UpdateContactDto
-  ): Promise<Contact> {
+  ): Promise<Contact | null> {
     return await this.contactsService.update(id, dto);
   }
 

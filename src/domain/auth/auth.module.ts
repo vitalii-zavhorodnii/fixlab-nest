@@ -12,15 +12,15 @@ import { AuthGuard } from './guards/auth.guard';
 
 @Module({
   imports: [
-    PassportModule,
-    UsersModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('SECRET')
       }),
       inject: [ConfigService]
-    })
+    }),
+    PassportModule,
+    UsersModule
   ],
   controllers: [AuthController],
   providers: [

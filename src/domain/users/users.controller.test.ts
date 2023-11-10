@@ -68,8 +68,9 @@ describe('Users Controller', () => {
     describe('POST createUser', () => {
       it('should return created User', async () => {
         const createdArticle = await controller.createUser(UserStubDto());
-        expect(createdArticle.login).toBe(UserStubDto().login.toLowerCase());
-        expect(createdArticle.password).toBe(undefined);
+
+        expect(createdArticle?.login).toBe(UserStubDto().login.toLowerCase());
+        expect(createdArticle?.password).toBe(undefined);
       });
 
       it('should return UnprocessableEntityException', async () => {

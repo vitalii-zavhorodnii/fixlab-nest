@@ -11,6 +11,7 @@ import { Gadget, GadgetSchema } from './schemas/gadget.schema';
     MongooseModule.forFeature([{ name: Gadget.name, schema: GadgetSchema }])
   ],
   controllers: [GadgetsController],
-  providers: [GadgetsService]
+  providers: [GadgetsService],
+  exports: [GadgetsService]
 })
 export class GadgetsModule {}

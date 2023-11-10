@@ -92,7 +92,7 @@ export class BrandsController {
     @Param('id') id: string,
     @Body()
     dto: UpdateBrandDto
-  ): Promise<Brand> {
+  ): Promise<Brand | null> {
     return await this.brandsService.update(id, dto);
   }
 

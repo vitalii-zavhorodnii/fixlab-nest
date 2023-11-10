@@ -23,7 +23,7 @@ export class BrandsService {
     return await this.brandModel.find({ isActive: true }).populate({ path: 'icon' });
   }
 
-  public async findOneByQuery(query: UpdateBrandDto): Promise<Brand> {
+  public async findOneByQuery(query: UpdateBrandDto): Promise<Brand | null> {
     return await this.brandModel.findOne(query).populate({ path: 'icon' });
   }
 
@@ -41,7 +41,7 @@ export class BrandsService {
     return brand;
   }
 
-  public async findAllByIds(ids: string[]) {
+  public async findAllByIds(ids: string[]): Promise<Brand[]> {
     const objectIds = ids.map((value) => new Types.ObjectId(value));
 
     const brands = await this.brandModel
@@ -68,7 +68,7 @@ export class BrandsService {
     return brand;
   }
 
-  public async update(id: string, dto: UpdateBrandDto): Promise<Brand> {
+  public async update(id: string, dto: UpdateBrandDto): Promise<Brand | null> {
     await this.findOneById(id);
 
     const brand = await this.brandModel

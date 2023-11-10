@@ -8,7 +8,7 @@ import {
   SWAGGER_VERSION
 } from 'constants/swagger.constants';
 
-export const SwaggerHelper = (app: INestApplication) => {
+export const SwaggerHelper = (app: INestApplication): void => {
   const config = new DocumentBuilder()
     .setTitle(SWAGGER_TITLE)
     .setDescription(SWAGGER_DESCRIPTION)

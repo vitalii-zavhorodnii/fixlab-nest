@@ -41,7 +41,7 @@ export class UsersController {
   public async createUser(
     @Body()
     dto: CreateUserDto
-  ): Promise<User> {
+  ): Promise<User | null> {
     return await this.usersService.create(dto);
   }
 
@@ -52,7 +52,7 @@ export class UsersController {
   public async update(
     @Param('id') id: string,
     @Body() dto: UpdateUserDto
-  ): Promise<User> {
+  ): Promise<User | null> {
     return await this.usersService.update(id, dto);
   }
 
@@ -73,7 +73,7 @@ export class UsersController {
   public async createFirstAdmin(
     @Param('key') key: string,
     @Query() query: CreateUserDto
-  ): Promise<User> {
+  ): Promise<User | null> {
     return await this.usersService.createFirstAdmin(key, query);
   }
 }

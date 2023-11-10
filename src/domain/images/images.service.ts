@@ -14,7 +14,7 @@ export class ImagesService {
     return await this.imageModel.find();
   }
 
-  public async findAllByType({ type }): Promise<Image[]> {
+  public async findAllByType({ type }: { type: string }): Promise<Image[]> {
     return await this.imageModel.find({ type });
   }
 
@@ -39,7 +39,7 @@ export class ImagesService {
     return image;
   }
 
-  public async update(id: string, dto: AddImageDto): Promise<Image> {
+  public async update(id: string, dto: AddImageDto): Promise<Image | null> {
     await this.findOneById(id);
 
     const image = await this.imageModel.findByIdAndUpdate(id, dto, {

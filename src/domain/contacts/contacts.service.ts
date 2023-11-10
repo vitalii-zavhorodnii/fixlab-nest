@@ -44,7 +44,7 @@ export class ContactsService {
     return createdContact;
   }
 
-  public async update(id: string, dto: UpdateContactDto): Promise<Contact> {
+  public async update(id: string, dto: UpdateContactDto): Promise<Contact | null> {
     const contact = await this.contactModel.findById(id);
 
     if (!contact) {

@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { Document, HydratedDocument, Types } from 'mongoose';
+import { Document, HydratedDocument, Types, now } from 'mongoose';
 
 import { Image } from 'domain/images/schemas/image.schema';
 import { Metadata } from 'shared/schemas/metadata.schema';
@@ -44,6 +44,12 @@ class Article extends Document {
   @ApiProperty({ type: Image })
   @Prop({ type: Types.ObjectId, ref: Image.name, default: null })
   readonly image: Types.ObjectId;
+
+  @Prop({ default: now() })
+  createdAt: Date;
+
+  @Prop({ set: () => now(), default: now() })
+  updatedAt: Date;
 }
 
 const ArticleSchema = SchemaFactory.createForClass(Article);

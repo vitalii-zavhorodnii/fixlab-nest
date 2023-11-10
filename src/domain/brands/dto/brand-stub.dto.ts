@@ -10,7 +10,6 @@ export const BrandStubDto = (): CreateBrandDto => {
       title: 'seo title',
       description: 'seo description',
       keywords: 'key words seo'
-    },
-    icon: null
+    }
   };
 };

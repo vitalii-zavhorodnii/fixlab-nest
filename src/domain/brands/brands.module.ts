@@ -9,6 +9,7 @@ import { Brand, BrandSchema } from './schemas/brand.schema';
 @Module({
   imports: [MongooseModule.forFeature([{ name: Brand.name, schema: BrandSchema }])],
   controllers: [BrandsController],
-  providers: [BrandsService]
+  providers: [BrandsService],
+  exports: [BrandsService]
 })
 export class BrandsModule {}

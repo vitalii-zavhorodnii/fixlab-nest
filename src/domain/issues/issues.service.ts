@@ -25,7 +25,7 @@ export class IssuesService {
       .populate({ path: 'benefits', populate: { path: 'icon' } });
   }
 
-  public async findOneByQuery(query: UpdateIssueDto): Promise<Issue> {
+  public async findOneByQuery(query: UpdateIssueDto): Promise<Issue | null> {
     return await this.issueModel
       .findOne(query)
       .select('-isActive')
@@ -64,7 +64,7 @@ export class IssuesService {
     return issue;
   }
 
-  public async update(id: string, dto: UpdateIssueDto): Promise<Issue> {
+  public async update(id: string, dto: UpdateIssueDto): Promise<Issue | null> {
     await this.findOneById(id);
 
     const updatedIssue = await this.issueModel

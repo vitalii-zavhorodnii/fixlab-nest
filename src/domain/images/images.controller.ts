@@ -113,7 +113,39 @@ export class ImagesController {
     @Body() body: AddImageDto,
     @UploadedFile(
       new ParseFilePipe({
-        // validators: [new FileTypeValidator({ fileType: '.(svg|SVG)' })]
+        validators: []
+      })
+    )
+    file: Express.Multer.File
+  ): Promise<Image> {
+    const filePath = `${process.env.SERVER_URL}/${file.path}`;
+
+    const pictureData = {
+      file: file,
+      src: filePath,
+      alt: body.alt,
+      type: body.type
+    };
+
+    const imageData = await this.imagesService.add(pictureData);
+
+    return imageData;
+  }
+
+  @ApiOperation({
+    summary: 'upload blog image'
+  })
+  @Post('/upload-blog')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: FileStorageHelper('blog')
+    })
+  )
+  public async uploadBlog(
+    @Body() body: AddImageDto,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: []
       })
     )
     file: Express.Multer.File
@@ -147,7 +179,7 @@ export class ImagesController {
       })
     )
     file: Express.Multer.File
-  ): Promise<Image> {
+  ): Promise<Image | null> {
     const filePath = `${process.env.SERVER_URL}/${file.path}`;
     const pictureData = {
       file: file,
@@ -171,11 +203,11 @@ export class ImagesController {
     @Body() body: AddImageDto,
     @UploadedFile(
       new ParseFilePipe({
-        // validators: [new FileTypeValidator({ fileType: '.(svg|SVG)' })]
+        validators: []
       })
     )
     file: Express.Multer.File
-  ): Promise<Image> {
+  ): Promise<Image | null> {
     const filePath = `${process.env.SERVER_URL}/${file.path}`;
     const pictureData = {
       file: file,

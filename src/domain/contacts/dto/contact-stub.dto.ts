@@ -11,7 +11,6 @@ export const ContactStubDto = (): CreateContactDto => {
     workingTime: '10:00 - 19:30',
     workingDate: 'нд - вихідний',
     googleMapLink: 'https://maps.app.goo.gl/1pi9sxQl',
-    googlePluginLink: 'https://www.google.com/maps/embed?plugin....',
-    image: null
+    googlePluginLink: 'https://www.google.com/maps/embed?plugin....'
   };
 };

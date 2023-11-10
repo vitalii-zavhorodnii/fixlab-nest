@@ -29,10 +29,13 @@ export class GadgetsService {
     return await this.gadgetModel
       .find({ isActive: true })
       .select('-isActive')
-      .populate({ path: 'icon' });
+      .populate({ path: 'icon' })
+      .populate({ path: 'brands' })
+      .populate({ path: 'issues' })
+      .populate({ path: 'gallery' });
   }
 
-  public async findOneByQuery(query: UpdateGadgetDto): Promise<Gadget> {
+  public async findOneByQuery(query: UpdateGadgetDto): Promise<Gadget | null> {
     return await this.gadgetModel
       .findOne(query)
       .populate({ path: 'brands', populate: { path: 'icon' } })
@@ -79,7 +82,7 @@ export class GadgetsService {
     return gadget;
   }
 
-  public async update(id: string, dto: UpdateGadgetDto): Promise<Gadget> {
+  public async update(id: string, dto: UpdateGadgetDto): Promise<Gadget | null> {
     await this.findOneById(id);
 
     const updatedGadget = await this.gadgetModel

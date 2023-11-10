@@ -5,7 +5,7 @@ import { MongoError } from 'mongodb';
 
 @Catch(MongoError)
 export class MongoErrorsFilter implements ExceptionFilter {
-  catch(exception: MongoError, host: ArgumentsHost) {
+  catch(exception: MongoError, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const message = this.getErrorMessage(exception);

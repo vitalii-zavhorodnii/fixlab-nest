@@ -73,7 +73,7 @@ export class BenefitsController {
     @Param('id') id: string,
     @Body()
     dto: UpdateBenefitDto
-  ): Promise<Benefit> {
+  ): Promise<Benefit | null> {
     return await this.benefitsService.update(id, dto);
   }
 

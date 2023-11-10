@@ -11,6 +11,7 @@ import { Contact, ContactSchema } from './schemas/contact.schema';
     MongooseModule.forFeature([{ name: Contact.name, schema: ContactSchema }])
   ],
   controllers: [ContactsController],
-  providers: [ContactsService]
+  providers: [ContactsService],
+  exports: [ContactsService]
 })
 export class ContactsModule {}

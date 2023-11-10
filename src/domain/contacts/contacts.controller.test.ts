@@ -74,7 +74,7 @@ describe('Contacts Controller', () => {
         expect(createdArticle.googleMapLink).toBe(googleMapLink);
         expect(createdArticle.googlePluginLink).toBe(googlePluginLink);
         expect(createdArticle.phones.length).toBe(phones.length);
-        expect(createdArticle.subways.length).toBe(subways.length);
+        expect(createdArticle.subways.length).toBe(subways?.length);
       });
     });
 

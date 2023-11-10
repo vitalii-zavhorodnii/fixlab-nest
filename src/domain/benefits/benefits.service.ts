@@ -48,7 +48,7 @@ export class BenefitsService {
     return benefit;
   }
 
-  public async update(id: string, dto: UpdateBenefitDto): Promise<Benefit> {
+  public async update(id: string, dto: UpdateBenefitDto): Promise<Benefit | null> {
     await this.findOneById(id);
 
     const updatedBenefit = await this.benefitModel

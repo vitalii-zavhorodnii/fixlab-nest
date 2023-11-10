@@ -9,6 +9,7 @@ import { Image, ImageSchema } from './schemas/image.schema';
 @Module({
   imports: [MongooseModule.forFeature([{ name: Image.name, schema: ImageSchema }])],
   controllers: [ImagesController],
-  providers: [ImagesService]
+  providers: [ImagesService],
+  exports: [ImagesService]
 })
 export class ImagesModule {}

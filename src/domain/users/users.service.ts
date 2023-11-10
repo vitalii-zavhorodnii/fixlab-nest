@@ -32,11 +32,11 @@ export class UsersService {
     return await this.userModel.findOne(query).select('-password');
   }
 
-  public async findOneWithPassword(login: string): Promise<User> {
+  public async findOneWithPassword(login: string): Promise<User | null> {
     return await this.userModel.findOne({ login });
   }
 
-  public async create(dto: CreateUserDto): Promise<User> {
+  public async create(dto: CreateUserDto): Promise<User | null> {
     const checkedUser = await this.userModel.findOne({ login: dto.login });
 
     if (checkedUser) {
@@ -58,7 +58,7 @@ export class UsersService {
     return user;
   }
 
-  public async update(id: string, dto: UpdateUserDto): Promise<User> {
+  public async update(id: string, dto: UpdateUserDto): Promise<User | null> {
     const user = await this.userModel.findById(id);
 
     if (!user) {
@@ -82,7 +82,7 @@ export class UsersService {
     return updatedUser;
   }
 
-  public async remove(id: string) {
+  public async remove(id: string): Promise<User | null> {
     if (!Types.ObjectId.isValid(id)) {
       throw new NotFoundException(`Incorrect ID - ${id}`);
     }
@@ -96,7 +96,10 @@ export class UsersService {
     return user;
   }
 
-  public async createFirstAdmin(key: string, dto: CreateUserDto): Promise<User> {
+  public async createFirstAdmin(
+    key: string,
+    dto: CreateUserDto
+  ): Promise<User | null> {
     const originalKey = this.configService.get<string>('D_ADMIN_KEY');
     const users = await this.userModel.find();
 

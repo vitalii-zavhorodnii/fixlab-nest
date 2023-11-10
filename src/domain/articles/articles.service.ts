@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model, SortOrder, Types } from 'mongoose';
 
 import { IPaginationAnswer } from 'shared/interfaces/pagination-answer.interface';
 
@@ -17,8 +17,8 @@ export class ArticlesService {
   ) {}
 
   public async findWithPagination(
-    { page, limit }: PaginationDto,
-    query?: UpdateArticleDto
+    { page = 1, limit = 1000000, sort = 'desc' }: PaginationDto,
+    query: UpdateArticleDto
   ): Promise<IPaginationAnswer<Article>> {
     const result: IPaginationAnswer<Article> = {
       itemsCount: 0,
@@ -36,9 +36,11 @@ export class ArticlesService {
 
     const articles = await this.articleModel
       .find(query)
+      .sort({ updatedAt: sort as SortOrder })
       .limit(limit)
       .skip(limit * (page - 1))
-      .populate({ path: 'image' });
+      .populate({ path: 'image' })
+      .select(['-createdAt', '-updatedAt']);
 
     result.items = articles;
     result.itemsCount = articles.length;
@@ -48,7 +50,7 @@ export class ArticlesService {
     return result;
   }
 
-  public async findOneByQuery(query: UpdateArticleDto): Promise<Article> {
+  public async findOneByQuery(query: UpdateArticleDto): Promise<Article | null> {
     return await this.articleModel.findOne(query).populate({ path: 'image' });
   }
 
@@ -81,7 +83,7 @@ export class ArticlesService {
     return article;
   }
 
-  public async update(id: string, dto: UpdateArticleDto): Promise<Article> {
+  public async update(id: string, dto: UpdateArticleDto): Promise<Article | null> {
     await this.findOneById(id);
 
     const article = await this.articleModel

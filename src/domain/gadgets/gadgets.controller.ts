@@ -102,7 +102,7 @@ export class GadgetsController {
   public async updateGadget(
     @Param('id') id: string,
     @Body() dto: UpdateGadgetDto
-  ): Promise<Gadget> {
+  ): Promise<Gadget | null> {
     return await this.gadetsService.update(id, dto);
   }
 
