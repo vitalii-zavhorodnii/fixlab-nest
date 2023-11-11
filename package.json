@@ -1,7 +1,7 @@
 {
-  "name": "backend",
+  "name": "gadget-shop",
   "version": "1.0",
-  "description": "fixlab nestjs repository",
+  "description": "gadget-shop nestjs application",
   "author": "https://github.com/vitalii-zavhorodnii",
   "private": true,
   "license": "UNLICENSED",
@@ -85,5 +85,5 @@
     "typescript": "^4.7.4"
   },
   "main": "main.ts",
-  "repository": "https://github.com/vitalii-zavhorodnii/fixlab-nest"
+  "repository": "https://github.com/vitalii-zavhorodnii/gadget-shop"
 }
