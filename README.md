@@ -9,23 +9,30 @@ NestJS application for serving NextJS app and API with protected routes for admi
 - nestjs, @/passport, @/swagger
 - mongoose, mongodb
 - node-mailer
+- docker, github-actions
+
+> Repository contains .env file, more in **.env.example**
 
 ### Commands
 ```bash
 # Installation of all packages
 $ npm install
-
+```
+```bash
 # Running the app in development mode
-$ npm run d
 $ npm run start:dev
-
+$ npm run d
+```
+```bash
 # Run lint, test and etc
 $ npm run lint
 $ npm run test
-
+```
+```bash
 # Run validation before merging
 $ npm run validate
-
+```
+```bash
 # Create build and run the app in production mode
 $ npm run build
 $ npm run start:prod
