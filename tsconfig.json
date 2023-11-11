@@ -1,5 +1,4 @@
 {
-  "extends": "../tsconfig.json",
   "compilerOptions": {
     "module": "commonjs",
     "strict": false,
@@ -14,14 +13,14 @@
     "sourceMap": true,
     "outDir": "./dist",
     "paths": {
-      "*": ["./server/src/*"],
-      "@server/*": ["./server/*"],
-      "@domain/*": ["./server/src/domain/*"],
-      "@shared/*": ["./server/src/shared/*"],
-      "@filters/*": ["./server/src/filters/*"],
-      "@helpers/*": ["./server/src/helpers/*"],
-      "@constants/*": ["./server/src/constants/*"],
-      "@decorators/*": ["./server/src/decorators/*"]
+      "*": ["./src/*"],
+      "@server/*": ["./*"],
+      "@domain/*": ["./src/domain/*"],
+      "@shared/*": ["./src/shared/*"],
+      "@filters/*": ["./src/filters/*"],
+      "@helpers/*": ["./src/helpers/*"],
+      "@constants/*": ["./src/constants/*"],
+      "@decorators/*": ["./src/decorators/*"]
     }
   }
 }
