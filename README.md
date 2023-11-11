@@ -1,4 +1,4 @@
-## About
+## About Pet Project
 NestJS application for serving NextJS app and API with protected routes for adminpanel
 - using nodemailer for sending notifications
 - creating first admin accout through GET request
