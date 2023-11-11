@@ -6,7 +6,7 @@ import { PassportModule } from '@nestjs/passport';
 
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { UsersModule } from 'domain/users/users.module';
+import { UsersModule } from '@domain/users/users.module';
 
 import { AuthGuard } from './guards/auth.guard';
 

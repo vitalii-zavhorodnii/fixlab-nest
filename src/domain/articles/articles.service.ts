@@ -2,13 +2,13 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, SortOrder, Types } from 'mongoose';
 
-import { IPaginationAnswer } from 'shared/interfaces/pagination-answer.interface';
+import { IPaginationAnswer } from '@shared/interfaces/pagination-answer.interface';
 
 import { Article } from './schemas/article.schema';
 
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
-import { PaginationDto } from 'shared/dto/pagination.dto';
+import { PaginationDto } from '@shared/dto/pagination.dto';
 
 @Injectable()
 export class ArticlesService {

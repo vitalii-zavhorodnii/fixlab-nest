@@ -14,7 +14,7 @@ import {
   ValidateNested
 } from 'class-validator';
 
-import { MetadataDto } from 'shared/dto/metadata.dto';
+import { MetadataDto } from '@shared/dto/metadata.dto';
 
 export class CreateGadgetDto {
   @ApiProperty({

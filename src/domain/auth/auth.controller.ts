@@ -5,15 +5,15 @@ import {
   UnprocessableEntityException
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Public } from 'decorators/public.decorator';
+import { Public } from '@decorators/public.decorator';
 
 import { AuthService } from './auth.service';
-import { UsersService } from 'domain/users/users.service';
+import { UsersService } from '@domain/users/users.service';
 
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 
-import { ROUTES } from 'constants/routes.constants';
+import { ROUTES } from '@constants/routes.constants';
 
 @ApiTags(ROUTES.auth)
 @Controller(ROUTES.auth)

@@ -26,9 +26,7 @@ export class CreateUserDto {
   @IsDefined()
   @IsNotEmpty()
   @IsString()
-  @Length(1, 60, {
-    message: 'login required to be 1-60 symbols length'
-  })
+  @Length(1, 60)
   readonly login: string;
 
   @ApiProperty({

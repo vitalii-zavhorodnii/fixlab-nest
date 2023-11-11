@@ -2,9 +2,9 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { Document, HydratedDocument, Types } from 'mongoose';
 
-import { Benefit } from 'domain/benefits/schemas/benefit.schema';
-import { Image } from 'domain/images/schemas/image.schema';
-import { Metadata } from 'shared/schemas/metadata.schema';
+import { Benefit } from '@domain/benefits/schemas/benefit.schema';
+import { Image } from '@domain/images/schemas/image.schema';
+import { Metadata } from '@shared/schemas/metadata.schema';
 
 export type IssueDocument = HydratedDocument<Issue>;
 

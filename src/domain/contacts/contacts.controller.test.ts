@@ -9,7 +9,7 @@ import { ContactsController } from './contacts.controller';
 import { ContactsService } from './contacts.service';
 
 import { Contact, ContactSchema } from './schemas/contact.schema';
-import { Image, ImageSchema } from 'domain/images/schemas/image.schema';
+import { Image, ImageSchema } from '@domain/images/schemas/image.schema';
 
 import { ContactStubDto } from './dto/contact-stub.dto';
 

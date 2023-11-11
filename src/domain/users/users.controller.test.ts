@@ -9,6 +9,8 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
+import { NotificationsModule } from '@domain/notifications/notifications.module';
+import { NotificationsService } from '@domain/notifications/notifications.service';
 
 import { User, UserSchema } from './schemas/user.schema';
 
@@ -36,12 +38,16 @@ describe('Users Controller', () => {
 
   beforeEach(async () => {
     const userModule: TestingModule = await Test.createTestingModule({
-      imports: [PassportModule.register({ defaultStrategy: 'jwt' })],
+      imports: [
+        PassportModule.register({ defaultStrategy: 'jwt' }),
+        NotificationsModule
+      ],
       controllers: [UsersController],
       providers: [
         { provide: getModelToken(User.name), useValue: model },
         UsersService,
-        ConfigService
+        ConfigService,
+        NotificationsService
       ]
     }).compile();
 

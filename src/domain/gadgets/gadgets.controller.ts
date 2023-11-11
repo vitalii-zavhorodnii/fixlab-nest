@@ -1,3 +1,4 @@
+import { Public } from '@decorators/public.decorator';
 import {
   Body,
   Controller,
@@ -10,10 +11,7 @@ import {
   Response as Res
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Public } from 'decorators/public.decorator';
 import { Response } from 'express';
-
-import { ISuccessDelete } from 'shared/interfaces/success-delete.interface';
 
 import { GadgetsService } from './gadgets.service';
 
@@ -22,7 +20,7 @@ import { Gadget } from './schemas/gadget.schema';
 import { CreateGadgetDto } from './dto/create-gadget.dto';
 import { UpdateGadgetDto } from './dto/update-gadget.dto';
 
-import { ROUTES } from 'constants/routes.constants';
+import { ROUTES } from '@constants/routes.constants';
 
 @ApiTags(ROUTES.gadgets)
 @Controller(ROUTES.gadgets)
@@ -115,9 +113,7 @@ export class GadgetsController {
     description: 'Gadget was not found'
   })
   @Delete('/:id')
-  public async removeGadget(@Param('id') id: string): Promise<ISuccessDelete> {
+  public async removeGadget(@Param('id') id: string): Promise<void> {
     await this.gadetsService.remove(id);
-
-    return { status: 204, result: 'success' };
   }
 }

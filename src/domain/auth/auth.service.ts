@@ -3,9 +3,9 @@ import { JwtService } from '@nestjs/jwt';
 
 import * as bcrypt from 'bcrypt';
 
-import { UsersService } from 'domain/users/users.service';
+import { UsersService } from '@domain/users/users.service';
 
-import { User } from 'domain/users/schemas/user.schema';
+import { User } from '@domain/users/schemas/user.schema';
 
 import { LoginDto } from './dto/login.dto';
 
@@ -18,9 +18,11 @@ export class AuthService {
 
   public async login(dto: LoginDto): Promise<string> {
     const user = await this.validatePassword(dto);
+    const payload = { sub: user._id };
+    const token = await this.jwtService.signAsync(payload);
+    await this.usersService.update(user._id, { token });
 
-    const payload = { sub: user._id, login: user.login };
-    return await this.jwtService.signAsync(payload);
+    return token;
   }
 
   public async validatePassword({ login, password }: LoginDto): Promise<User> {
@@ -30,8 +32,7 @@ export class AuthService {
 
     const passwordValid = await bcrypt.compare(password, user.password);
 
-    if (!user || !passwordValid)
-      throw new NotFoundException('User was not found');
+    if (!user || !passwordValid) throw new NotFoundException('User was not found');
 
     return user;
   }

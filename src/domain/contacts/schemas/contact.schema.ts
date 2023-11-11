@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { Document, HydratedDocument, Types } from 'mongoose';
 
-import { Image } from 'domain/images/schemas/image.schema';
+import { Image } from '@domain/images/schemas/image.schema';
 
 export type ContactDocument = HydratedDocument<Contact>;
 

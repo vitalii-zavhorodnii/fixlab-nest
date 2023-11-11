@@ -41,6 +41,9 @@ class User extends Document {
   @ApiProperty({ example: 'Admin' })
   @Prop({ type: String, required: true })
   readonly name: string;
+
+  @Prop({ type: String, default: null })
+  readonly token: string | null;
 }
 
 const UserSchema = SchemaFactory.createForClass(User);

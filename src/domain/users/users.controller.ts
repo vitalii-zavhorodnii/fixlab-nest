@@ -1,31 +1,37 @@
+import { Public } from '@decorators/public.decorator';
 import {
   Body,
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
-  Patch,
   Post,
+  Put,
   Query
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Public } from 'decorators/public.decorator';
-
-import { ISuccessDelete } from 'shared/interfaces/success-delete.interface';
 
 import { UsersService } from './users.service';
+import { NotificationsService } from '@domain/notifications/notifications.service';
 
 import { User } from './schemas/user.schema';
 
+import { PasswordGeneratorHelper } from '@helpers/password-generator.helper';
+
 import { CreateUserDto } from './dto/create-user.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
-import { ROUTES } from 'constants/routes.constants';
+import { ROUTES } from '@constants/routes.constants';
 
 @ApiTags(ROUTES.users)
 @Controller(ROUTES.users)
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly notificationsService: NotificationsService
+  ) {}
 
   @ApiOperation({ summary: 'get all users' })
   @ApiResponse({ status: 200, type: User, isArray: true })
@@ -38,17 +44,14 @@ export class UsersController {
   @ApiResponse({ status: 200, type: User })
   @ApiResponse({ status: 400, description: 'Incorrect content data' })
   @Post('')
-  public async createUser(
-    @Body()
-    dto: CreateUserDto
-  ): Promise<User | null> {
+  public async createUser(@Body() dto: CreateUserDto): Promise<User | null> {
     return await this.usersService.create(dto);
   }
 
   @ApiOperation({ summary: 'update existing user by ID' })
   @ApiResponse({ status: 200, type: User })
   @ApiResponse({ status: 404, description: 'Contact was not found' })
-  @Patch('/:id')
+  @Put('/:id')
   public async update(
     @Param('id') id: string,
     @Body() dto: UpdateUserDto
@@ -60,20 +63,45 @@ export class UsersController {
   @ApiResponse({ status: 204 })
   @ApiResponse({ status: 404, description: 'User was not found' })
   @Delete('/:id')
-  public async removeUserById(@Param('id') id: string): Promise<ISuccessDelete> {
+  public async removeUserById(@Param('id') id: string): Promise<void> {
     await this.usersService.remove(id);
+  }
 
-    return { status: 204, result: 'success' };
+  @ApiOperation({ summary: 'send email for user with new password' })
+  @ApiResponse({ status: 204 })
+  @Public()
+  @Get('/reset-password')
+  public async renewPassword(@Query() { email }: ResetPasswordDto): Promise<void> {
+    const updatedPassword = PasswordGeneratorHelper();
+    const userFound = await this.usersService.findOneByQuery({
+      email,
+      isActive: true
+    });
+
+    if (!userFound || !userFound.token) {
+      throw new NotFoundException(`User with email ${email} was not found!`);
+    }
+
+    const user = await this.usersService.update(userFound.id, {
+      password: updatedPassword,
+      token: null
+    });
+
+    await this.notificationsService.sendPasswordReset(
+      user.email,
+      user.login,
+      updatedPassword
+    );
   }
 
   @ApiOperation({ summary: 'create first admin' })
-  @ApiResponse({ status: 204, type: User })
+  @ApiResponse({ status: 200, type: User })
   @Public()
   @Get('/init/:key')
   public async createFirstAdmin(
     @Param('key') key: string,
     @Query() query: CreateUserDto
-  ): Promise<User | null> {
+  ): Promise<User> {
     return await this.usersService.createFirstAdmin(key, query);
   }
 }

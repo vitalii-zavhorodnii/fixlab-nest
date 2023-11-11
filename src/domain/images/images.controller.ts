@@ -15,17 +15,15 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-import { ISuccessDelete } from 'shared/interfaces/success-delete.interface';
-
 import { ImagesService } from './images.service';
 
 import { Image } from './schemas/image.schema';
 
-import { FileStorageHelper } from 'helpers/file-storage.helper';
+import { FileStorageHelper } from '@helpers/file-storage.helper';
 
 import { AddImageDto } from './dto/add-image.dto';
 
-import { ROUTES } from 'constants/routes.constants';
+import { ROUTES } from '@constants/routes.constants';
 
 @ApiTags(ROUTES.images)
 @Controller(ROUTES.images)
@@ -232,9 +230,7 @@ export class ImagesController {
   @ApiResponse({ status: 204 })
   @ApiResponse({ status: 404, description: 'Image was not found' })
   @Delete('/:id')
-  public async removeImage(@Param('id') id: string): Promise<ISuccessDelete> {
+  public async removeImage(@Param('id') id: string): Promise<void> {
     await this.imagesService.remove(id);
-
-    return { status: 204, result: 'success' };
   }
 }

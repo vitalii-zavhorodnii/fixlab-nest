@@ -1,21 +1,21 @@
 import { INestApplication, Injectable } from '@nestjs/common';
 import * as trpcExpress from '@trpc/server/adapters/express';
 
-import { IPaginationAnswer } from 'shared/interfaces/pagination-answer.interface';
+import { IPaginationAnswer } from '@shared/interfaces/pagination-answer.interface';
 import { z } from 'zod';
 
 import { TrpcService } from './trpc.service';
-import { ArticlesService } from 'domain/articles/articles.service';
-import { BrandsService } from 'domain/brands/brands.service';
-import { ContactsService } from 'domain/contacts/contacts.service';
-import { GadgetsService } from 'domain/gadgets/gadgets.service';
-import { IssuesService } from 'domain/issues/issues.service';
+import { ArticlesService } from '@domain/articles/articles.service';
+import { BrandsService } from '@domain/brands/brands.service';
+import { ContactsService } from '@domain/contacts/contacts.service';
+import { GadgetsService } from '@domain/gadgets/gadgets.service';
+import { IssuesService } from '@domain/issues/issues.service';
 
-import { Article } from 'domain/articles/schemas/article.schema';
-import { Brand } from 'domain/brands/schemas/brand.schema';
-import { Contact } from 'domain/contacts/schemas/contact.schema';
-import { Gadget } from 'domain/gadgets/schemas/gadget.schema';
-import { Issue } from 'domain/issues/schemas/issue.schema';
+import { Article } from '@domain/articles/schemas/article.schema';
+import { Brand } from '@domain/brands/schemas/brand.schema';
+import { Contact } from '@domain/contacts/schemas/contact.schema';
+import { Gadget } from '@domain/gadgets/schemas/gadget.schema';
+import { Issue } from '@domain/issues/schemas/issue.schema';
 
 @Injectable()
 export class TrpcRouter {

@@ -10,7 +10,7 @@ import { Model, Types } from 'mongoose';
 
 import { User } from './schemas/user.schema';
 
-import { PasswordEncryptHelper } from 'helpers/password-encrypt.helper';
+import { PasswordEncryptHelper } from '@helpers/password-encrypt.helper';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -28,6 +28,16 @@ export class UsersService {
     return users;
   }
 
+  public async findOneById(id: string): Promise<User> {
+    const user = await this.userModel.findById(id).select('-password');
+
+    if (!user) {
+      throw new NotFoundException(`User with ${id} was not found!`);
+    }
+
+    return user;
+  }
+
   public async findOneByQuery(query: UpdateUserDto): Promise<User> {
     return await this.userModel.findOne(query).select('-password');
   }
@@ -36,15 +46,16 @@ export class UsersService {
     return await this.userModel.findOne({ login });
   }
 
-  public async create(dto: CreateUserDto): Promise<User | null> {
+  public async create(dto: CreateUserDto): Promise<User> {
+    const errorData = {
+      statusCode: 422,
+      error: 'Bad Request',
+      message: `User already exists`
+    };
     const checkedUser = await this.userModel.findOne({ login: dto.login });
 
     if (checkedUser) {
-      throw new UnprocessableEntityException({
-        statusCode: 422,
-        error: 'Bad Request',
-        message: `User already exists`
-      });
+      throw new UnprocessableEntityException(errorData);
     }
 
     const password = await PasswordEncryptHelper(dto.password);
@@ -55,34 +66,32 @@ export class UsersService {
       .findOne({ login: createdUser.login })
       .select('-password');
 
+    if (!user) {
+      throw new UnprocessableEntityException(errorData);
+    }
+
     return user;
   }
 
-  public async update(id: string, dto: UpdateUserDto): Promise<User | null> {
-    const user = await this.userModel.findById(id);
-
-    if (!user) {
-      throw new NotFoundException(`User with ID ${id} was not found`);
-    }
+  public async update(id: string, dto: UpdateUserDto): Promise<User> {
+    const user = await this.findOneById(id);
 
     const password = dto.password
       ? await PasswordEncryptHelper(dto.password)
       : user.password;
 
     const updatedUser = await this.userModel
-      .findByIdAndUpdate(
-        id,
-        { ...dto, password },
-        {
-          new: true
-        }
-      )
+      .findByIdAndUpdate(id, { ...dto, password }, { new: true })
       .select('-password');
+
+    if (!updatedUser) {
+      throw new NotFoundException(`User with ID ${id} was not found`);
+    }
 
     return updatedUser;
   }
 
-  public async remove(id: string): Promise<User | null> {
+  public async remove(id: string): Promise<User> {
     if (!Types.ObjectId.isValid(id)) {
       throw new NotFoundException(`Incorrect ID - ${id}`);
     }
@@ -96,10 +105,7 @@ export class UsersService {
     return user;
   }
 
-  public async createFirstAdmin(
-    key: string,
-    dto: CreateUserDto
-  ): Promise<User | null> {
+  public async createFirstAdmin(key: string, dto: CreateUserDto): Promise<User> {
     const originalKey = this.configService.get<string>('D_ADMIN_KEY');
     const users = await this.userModel.find();
 
@@ -108,6 +114,10 @@ export class UsersService {
     }
 
     const admin = await this.create(dto);
+
+    if (!admin) {
+      throw new UnprocessableEntityException('User was not created! Unvalid DTO');
+    }
 
     return admin;
   }

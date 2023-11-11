@@ -1,3 +1,4 @@
+import { Public } from '@decorators/public.decorator';
 import {
   Body,
   Controller,
@@ -11,10 +12,7 @@ import {
   Response as Res
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Public } from 'decorators/public.decorator';
 import { Response } from 'express';
-
-import { ISuccessDelete } from 'shared/interfaces/success-delete.interface';
 
 import { ArticlesService } from './articles.service';
 
@@ -22,9 +20,9 @@ import { Article } from './schemas/article.schema';
 
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
-import { PaginationDto } from 'shared/dto/pagination.dto';
+import { PaginationDto } from '@shared/dto/pagination.dto';
 
-import { ROUTES } from 'constants/routes.constants';
+import { ROUTES } from '@constants/routes.constants';
 
 @ApiTags(ROUTES.articles)
 @Controller(ROUTES.articles)
@@ -114,9 +112,7 @@ export class ArticlesController {
   @ApiResponse({ status: 204 })
   @ApiResponse({ status: 404, description: 'Article was not found' })
   @Delete('/:id')
-  public async removeArticle(@Param('id') id: string): Promise<ISuccessDelete> {
+  public async removeArticle(@Param('id') id: string): Promise<void> {
     await this.articlesService.remove(id);
-
-    return { status: 204, result: 'success' };
   }
 }

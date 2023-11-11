@@ -2,10 +2,10 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { Document, HydratedDocument, Types } from 'mongoose';
 
-import { Brand } from 'domain/brands/schemas/brand.schema';
-import { Image } from 'domain/images/schemas/image.schema';
-import { Issue } from 'domain/issues/schemas/issue.schema';
-import { Metadata } from 'shared/schemas/metadata.schema';
+import { Brand } from '@domain/brands/schemas/brand.schema';
+import { Image } from '@domain/images/schemas/image.schema';
+import { Issue } from '@domain/issues/schemas/issue.schema';
+import { Metadata } from '@shared/schemas/metadata.schema';
 
 export type GadgetDocument = HydratedDocument<Gadget>;
 
