@@ -48,9 +48,6 @@ jobs:
       - name: Run tests
         run: npm run test
 
-      - name: Create build
-        run: npm run build
-
       - name: Create '.env' file
         shell: bash
         env:
@@ -64,14 +61,23 @@ jobs:
       - name: Docker drop test image
         run: docker rmi $APP_NAME
 
-      - name: commit-push_branch-test
-        uses: dsayling/commit-branch-check-action@main
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: 'Update from ${{github.event.pull_request.head.ref}}'
-          dest-branch: production
-          verify-checks: false
-          delete-after-checks: false
+      - name: Push to Another Branch
+        run: |
+          git config user.name "${{ github.actor.name }}"
+          git config user.email "${{ github.actor.email }}"
+
+          git add .
+          git commit -m "updates from main branch"
+          git push origin production
+
+      # - name: commit-push_branch-test
+      #   uses: dsayling/commit-branch-check-action@main
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     commit-message: 'Update from ${{github.event.pull_request.head.ref}}'
+      #     dest-branch: production
+      #     verify-checks: false
+      #     delete-after-checks: false
 
       # - name: Push to production branch
       #   uses: Automattic/action-commit-to-branch@master
