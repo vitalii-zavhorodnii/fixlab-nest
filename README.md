@@ -15,6 +15,12 @@ NestJS application for serving NextJS app and API with protected routes for admi
 
 ### Commands
 ```bash
+# Docker create image
+$ docker build --no-cache -t gadget-shop .
+# Run container withh app on port 4000
+$ docker run -p 4000:4000 gadget-shop
+```
+```bash
 # Installation of all packages
 $ npm install
 ```
