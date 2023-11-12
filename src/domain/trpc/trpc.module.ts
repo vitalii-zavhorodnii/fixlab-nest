@@ -9,6 +9,8 @@ import { ContactsModule } from '@domain/contacts/contacts.module';
 import { GadgetsModule } from '@domain/gadgets/gadgets.module';
 import { IssuesModule } from '@domain/issues/issues.module';
 
+import { MongoErrorsFilter } from '@filters/mongo-errors.filter';
+
 @Module({
   imports: [
     GadgetsModule,
