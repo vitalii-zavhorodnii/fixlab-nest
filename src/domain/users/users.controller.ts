@@ -25,8 +25,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 import { ROUTES } from '@constants/routes.constants';
 
-import { PasswordEncryptHelper } from 'helpers/password-encrypt.helper';
-
 @ApiTags(ROUTES.users)
 @Controller(ROUTES.users)
 export class UsersController {
