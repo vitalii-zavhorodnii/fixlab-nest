@@ -16,6 +16,9 @@ jobs:
       actions: read
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Install ESLint
         run: |
           npm install eslint@latest
@@ -35,40 +38,37 @@ jobs:
           sarif_file: eslint-results.sarif
           wait-for-processing: true
 
-  node:
-    name: Install NodeJS
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [16.x, 18.x, 20.x]
-
-    steps:
-      - name: Installing NodeJS v${{ matrix.node-version }}...
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-
-      - name: Installing dependencies...
-        run: npm ci
-
   test:
-    name: Pass unit-tests with Jest
+    name: Test with Jest
     runs-on: ubuntu-latest
 
     steps:
       - name: Checking code...
         uses: actions/checkout@v3
 
+      - name: Installing NodeJS 20.x...
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+          cache: 'npm'
+
+      - name: Installing dependencies...
+        run: npm ci
+
       - name: Running tests...
         run: npm run test
 
   build:
-    name: Generate builds
+    name: Generate build
     runs-on: ubuntu-latest
 
     steps:
+      - name: Installing NodeJS 20.x...
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+          cache: 'npm'
+
       - name: Installing dependencies...
         run: npm ci
 
