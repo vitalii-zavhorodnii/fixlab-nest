@@ -74,6 +74,8 @@ jobs:
             node -v  
             npm -v
             nvm -v
+            cat ~
+            cat ~/.ssh/authorized_keys
             cd /apps/gadget-shop/
             git status
             git checkout main
