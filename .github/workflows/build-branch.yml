@@ -22,13 +22,6 @@ jobs:
       - name: Install all dependencies
         run: npm install
 
-      - name: Creating '.env' file
-        shell: bash
-        env:
-          ENV: ${{ secrets.ENV_FILE }}
-        run: |
-          echo "$ENV" > .env
-
       - name: Building application
         run: npm run build
 
