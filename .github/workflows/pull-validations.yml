@@ -81,7 +81,7 @@ jobs:
 
       - name: 'Creating .env file'
         run: |
-          echo "${{ secrets.server }}" > .env
+          echo "${{ secrets.ENV_FILE }}" > .env
 
       - name: Build Docker image
         run: docker build . --no-cache -t $APP_NAME

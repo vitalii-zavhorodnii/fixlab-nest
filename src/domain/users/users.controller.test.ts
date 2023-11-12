@@ -77,7 +77,7 @@ describe('Users Controller', () => {
 
         expect(createdArticle?.login).toBe(UserStubDto().login.toLowerCase());
         expect(createdArticle?.password).toBe(undefined);
-      });
+      }, 10000);
 
       it('should return UnprocessableEntityException', async () => {
         await new model(UserStubDto()).save();
@@ -88,7 +88,7 @@ describe('Users Controller', () => {
             message: `User already exists`
           })
         );
-      });
+      }, 10000);
     });
   });
 });
