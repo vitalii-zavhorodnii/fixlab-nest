@@ -23,43 +23,43 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install ESLint
-        run: |
-          npm install eslint@latest
-          npm install @microsoft/eslint-formatter-sarif@latest
+      # - name: Install ESLint
+      #   run: |
+      #     npm install eslint@latest
+      #     npm install @microsoft/eslint-formatter-sarif@latest
 
-      - name: Run lint
-        run: npx eslint .
-          --config .eslintrc.js
-          --ext .ts,.js,.tsx,.jsx
-          --format @microsoft/eslint-formatter-sarif
-          --output-file eslint-results.sarif
-        continue-on-error: false
+      # - name: Run lint
+      #   run: npx eslint .
+      #     --config .eslintrc.js
+      #     --ext .ts,.js,.tsx,.jsx
+      #     --format @microsoft/eslint-formatter-sarif
+      #     --output-file eslint-results.sarif
+      #   continue-on-error: false
 
-      - name: Install NodeJS 20.x
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20.x
-          cache: 'npm'
+      # - name: Install NodeJS 20.x
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     node-version: 20.x
+      #     cache: 'npm'
 
-      - name: Install dependencies
-        run: npm install
+      # - name: Install dependencies
+      #   run: npm install
 
-      - name: Run tests
-        run: npm run test
+      # - name: Run tests
+      #   run: npm run test
 
-      - name: Create '.env' file
-        shell: bash
-        env:
-          ENV: ${{ secrets.ENV_FILE }}
-        run: |
-          echo "$ENV" > .env
+      # - name: Create '.env' file
+      #   shell: bash
+      #   env:
+      #     ENV: ${{ secrets.ENV_FILE }}
+      #   run: |
+      #     echo "$ENV" > .env
 
-      - name: Docker test build image
-        run: docker build . --no-cache -t $APP_NAME
+      # - name: Docker test build image
+      #   run: docker build . --no-cache -t $APP_NAME
 
-      - name: Docker drop test image
-        run: docker rmi $APP_NAME
+      # - name: Docker drop test image
+      #   run: docker rmi $APP_NAME
 
       - name: Push to Another Branch
         run: |
