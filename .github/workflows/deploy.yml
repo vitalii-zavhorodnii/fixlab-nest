@@ -1,0 +1,30 @@
+name: Deploy in VPS
+
+on:
+  pull_request:
+    branches: ['main']
+    types: ['closed']
+
+  workflow_dispatch:
+
+env:
+  APP_NAME: gs-backend
+
+jobs:
+  deploy:
+    name: Deploing with SSH
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checking out repository
+        uses: actions/checkout@v2
+
+      - name: Install dependencies and build
+        run: |
+          npm install
+          npm run build
+
+      - name: Deploy to VPS
+        run: |
+          scp -r ./dist/* ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}}:/apps/$APP_NAME
+          ssh ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}} 'cd /apps/$APP_NAME/src && node main'
