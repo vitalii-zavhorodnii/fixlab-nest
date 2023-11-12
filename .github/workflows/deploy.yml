@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  APP_NAME: gadget-shop
+  APP_NAME: gadgets-shop
 
 jobs:
   deploy:
