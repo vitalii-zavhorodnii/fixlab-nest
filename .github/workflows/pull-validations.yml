@@ -20,15 +20,15 @@ jobs:
       actions: read
 
     steps:
-      - name: Checkout code
+      - name: Checkout code...
         uses: actions/checkout@v3
 
-      - name: Install ESLint
+      - name: Install ESLint...
         run: |
           npm install eslint@latest
           npm install @microsoft/eslint-formatter-sarif@latest
 
-      - name: Run ESLint
+      - name: Run ESLint...
         run: npx eslint .
           --config .eslintrc.js
           --ext .ts,.js,.tsx,.jsx
@@ -36,7 +36,7 @@ jobs:
           --output-file eslint-results.sarif
         continue-on-error: true
 
-      - name: Upload analysis results to GitHub
+      - name: Upload analysis results to GitHub...
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: eslint-results.sarif
@@ -73,8 +73,8 @@ jobs:
       - name: Checking code...
         uses: actions/checkout@v3
 
-      - name: Build Docker image
+      - name: Build Docker image...
         run: docker build . --no-cache -t $APP_NAME
 
-      - name: Remove Docker image
+      - name: Remove Docker image...
         run: docker rmi $APP_NAME

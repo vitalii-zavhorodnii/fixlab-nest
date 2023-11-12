@@ -1,0 +1,21 @@
+name: Deploy in VPS
+
+on:
+  pull_request:
+    branches: ['main']
+    types: ['closed']
+
+  workflow_dispatch:
+
+env:
+  APP_NAME: gs-backend
+
+jobs:
+  deploy:
+    if: github.event.pull_request.merged == true
+    name: Deploing with SSH...
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: |
+          echo The PR was merged
