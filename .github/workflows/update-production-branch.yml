@@ -67,6 +67,10 @@ jobs:
           git config user.email "${{ secrets.GH_EMAIL }}"
 
           git fetch
+          git checkout production
+          git pull origin main
+          git add .
+          git commit -m 'merged with main'
           git push origin production
 
       # - name: commit-push_branch-test
