@@ -100,8 +100,7 @@ jobs:
       - name: Push from dev to prod branch.
         uses: Automattic/action-commit-to-branch@master
         with:
-          dest_branch: 'main'
-          source_branch: 'production'
+          branch: 'production'
           commit_message: 'Tested, lined and auto-merged with Production'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Required
