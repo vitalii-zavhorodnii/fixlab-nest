@@ -18,6 +18,13 @@ jobs:
       - name: Checking out repository
         uses: actions/checkout@v2
 
+      - name: Create '.env' file
+        shell: bash
+        env:
+          ENV: ${{ secrets.ENV_FILE }}
+        run: |
+          echo "$ENV" > .env
+
       - name: Deploying using SSH
         uses: appleboy/ssh-action@master
         with:
