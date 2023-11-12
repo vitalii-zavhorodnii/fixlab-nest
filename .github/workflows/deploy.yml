@@ -2,7 +2,7 @@ name: Deploy in VPS
 
 on:
   push:
-    branches: ['build']
+    branches: ['production']
 
   workflow_dispatch:
 
