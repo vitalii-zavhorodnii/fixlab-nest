@@ -1,9 +1,11 @@
 name: Deploy on development VPS
 
 on:
-  pull_request:
-    branches: ['main']
-    types: ['closed']
+  # pull_request:
+  #   branches: ['main']
+  #   types: ['closed']
+  push:
+    branches: ['cicd']
 
   workflow_dispatch:
 
@@ -69,6 +71,9 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           port: 22
           script: |
+            node -v  
+            npm -v
+            nvm -v
             cd /apps/gadget-shop/
             git status
             git checkout main
