@@ -67,15 +67,16 @@ jobs:
       - name: Deploying using SSH
         uses: appleboy/ssh-action@master
         with:
-          key: ${{ secrets.SSH_SECRET_KEY }}
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_SECRET_KEY }}
           port: 22
           script: |
             cd ~/apps/$APP_NAME
             git pull origin main
             git status
             npm install
+            npm run build
             pm2 start /dist/src/main.js --name $APP_NAME
 
       # - name: Install dependencies and build
