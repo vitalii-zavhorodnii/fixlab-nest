@@ -69,5 +69,8 @@ jobs:
       - name: Checking code...
         uses: actions/checkout@v3
 
-      - name: Build the Docker image
+      - name: Build Docker image
+        run: docker build . --no-cache -t backend-app
+
+      - name: Remove Docker image
         run: docker build . --no-cache -t backend-app
