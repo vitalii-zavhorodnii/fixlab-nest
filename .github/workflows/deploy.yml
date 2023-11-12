@@ -12,10 +12,19 @@ env:
 
 jobs:
   deploy:
-    if: github.event.pull_request.merged == true
-    name: Deploing with SSH...
+    name: Deploing with SSH
     runs-on: ubuntu-latest
 
     steps:
-      - run: |
-          echo The PR was merged
+      - name: Checking out repository
+        uses: actions/checkout@v2
+
+      - name: Install dependencies and build
+        run: |
+          npm install
+          npm run build
+
+      - name: Deploy to VPS
+        run: |
+          scp -r ./dist/* ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}}:/apps/$APP_NAME
+          ssh ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}} 'cd /apps/$APP_NAME/src && node'

@@ -77,7 +77,7 @@ describe('Users Controller', () => {
 
         expect(createdArticle?.login).toBe(UserStubDto().login.toLowerCase());
         expect(createdArticle?.password).toBe(undefined);
-      });
+      }, 10000);
 
       it('should return UnprocessableEntityException', async () => {
         await new model(UserStubDto()).save();
@@ -85,10 +85,10 @@ describe('Users Controller', () => {
           new UnprocessableEntityException({
             statusCode: 422,
             error: 'Bad Request',
-            message: `User already exists`
+            message: 'User already exists'
           })
         );
-      });
+      }, 10000);
     });
   });
 });

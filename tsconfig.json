@@ -20,7 +20,8 @@
       "@filters/*": ["./src/filters/*"],
       "@helpers/*": ["./src/helpers/*"],
       "@constants/*": ["./src/constants/*"],
-      "@decorators/*": ["./src/decorators/*"]
+      "@decorators/*": ["./src/decorators/*"],
+      "@config/*": ["./src/config/*"],
     }
   }
 }
