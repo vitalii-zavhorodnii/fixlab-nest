@@ -6,6 +6,10 @@ on:
 
   workflow_dispatch:
 
+env:
+  APP_NAME: gs-backend
+    
+
 jobs:
   eslint:
     name: Validate with ESLint
@@ -39,7 +43,7 @@ jobs:
           wait-for-processing: true
 
   test:
-    name: Test with Jest
+    name: Unit-tests and build
     runs-on: ubuntu-latest
 
     steps:
@@ -62,7 +66,7 @@ jobs:
         run: npm run build
 
   docker:
-    name: Build Docker
+    name: Docker image test
     runs-on: ubuntu-latest
 
     steps:
@@ -70,7 +74,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build Docker image
-        run: docker build . --no-cache -t backend-app
+        run: docker build . --no-cache -t $APP_NAME
 
       - name: Remove Docker image
-        run: docker build . --no-cache -t backend-app
+        run: docker rmi $APP_NAME
