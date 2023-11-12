@@ -64,7 +64,7 @@ jobs:
       # - name: Docker drop test image
       #   run: docker rmi $APP_NAME
 
-      - name: Deploying using SSH 🚀
+      - name: Deploying using SSH
         uses: appleboy/ssh-action@master
         with:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -72,7 +72,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           port: 22
           script: |
-            cd ~/apps/$APP_NAME
+            cd /apps/$APP_NAME
             git status
             git checkout main
             git pull origin main
