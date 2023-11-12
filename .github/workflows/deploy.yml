@@ -1,4 +1,4 @@
-name: Update production branch
+name: Deploy on development VPS
 
 on:
   pull_request:
@@ -11,8 +11,8 @@ env:
   APP_NAME: gs-backend
 
 jobs:
-  build:
-    name: Validate build and push
+  deploy:
+    name: Lint, test and deploy
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -48,6 +48,9 @@ jobs:
       # - name: Run tests
       #   run: npm run test
 
+      # - name: Create build
+      #   run: npm run build
+
       # - name: Create '.env' file
       #   shell: bash
       #   env:
@@ -61,31 +64,26 @@ jobs:
       # - name: Docker drop test image
       #   run: docker rmi $APP_NAME
 
-      - name: Push to Another Branch
-        run: |
-          git config user.name "${{ secrets.GH_USERNAME }}"
-          git config user.email "${{ secrets.GH_EMAIL }}"
+      - name: Deploying using SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_SECRET_KEY }}
+          port: 22
+          script: |
+            cd ~/apps/$APP_NAME
+            git pull origin main
+            git status
+            npm install
+            pm2 start /dist/src/main.js --name $APP_NAME
 
-          git fetch
-          git checkout production
-          git pull origin main
-          git add .
-          git commit -m 'merged with main'
-          git push origin production
+      # - name: Install dependencies and build
+      #   run: |
+      #     npm install
+      #     npm run build
 
-      # - name: commit-push_branch-test
-      #   uses: dsayling/commit-branch-check-action@main
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     commit-message: 'Update from ${{github.event.pull_request.head.ref}}'
-      #     dest-branch: production
-      #     verify-checks: false
-      #     delete-after-checks: false
-
-      # - name: Push to production branch
-      #   uses: Automattic/action-commit-to-branch@master
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     branch: 'production'
-      #     commit_message: 'Automated tests for main.'
+      # - name: Deploy to VPS
+      #   run: |
+      #     scp -r ./dist/* ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}}:/apps/$APP_NAME
+      #     ssh ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}} 'cd /apps/$APP_NAME/src && node'
