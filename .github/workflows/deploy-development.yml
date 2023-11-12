@@ -1,8 +1,8 @@
-name: Deploy in VPS
+name: Deploy on development VPS
 
 on:
   push:
-    branches: ['build']
+    branches: ['production']
 
   workflow_dispatch:
 
@@ -11,11 +11,11 @@ env:
 
 jobs:
   deploy:
-    name: Deploying with SSH
+    name: Deploy on development VPS
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checking out repository
+      - name: Check code base
         uses: actions/checkout@v2
 
       - name: Deploying using SSH

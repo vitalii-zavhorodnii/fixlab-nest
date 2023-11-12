@@ -1,10 +1,9 @@
-name: Pre-prequest
+name: Update production branch
 
 on:
-  push:
-    branches: ['main']
   pull_request:
     branches: ['main']
+    types: ['closed']
 
   workflow_dispatch:
 
@@ -12,16 +11,8 @@ env:
   APP_NAME: gs-backend
 
 jobs:
-  codebase:
-    name: Code base Check
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check code base
-        uses: actions/checkout@v3
-
-  eslint:
-    name: ESLint validator
+  build:
+    name: Validate build and push
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -29,6 +20,12 @@ jobs:
       actions: read
 
     steps:
+      - name: Check repository
+        uses: actions/checkout@v2
+
+      - name: Check code base
+        uses: actions/checkout@v3
+
       - name: Install ESLint
         run: |
           npm install eslint@latest
@@ -40,19 +37,8 @@ jobs:
           --ext .ts,.js,.tsx,.jsx
           --format @microsoft/eslint-formatter-sarif
           --output-file eslint-results.sarif
-        continue-on-error: true
+        continue-on-error: false
 
-      - name: Create lint report
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: eslint-results.sarif
-          wait-for-processing: true
-
-  test:
-    name: Jest unit-tests
-    runs-on: ubuntu-latest
-
-    steps:
       - name: Install NodeJS 20.x
         uses: actions/setup-node@v3
         with:
@@ -68,20 +54,23 @@ jobs:
       - name: Create build
         run: npm run build
 
-  docker:
-    name: Docker image test
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Creating '.env' file
+      - name: Create '.env' file
         shell: bash
         env:
           ENV: ${{ secrets.ENV_FILE }}
         run: |
           echo "$ENV" > .env
 
-      - name: Docker test build image 
+      - name: Docker test build image
         run: docker build . --no-cache -t $APP_NAME
 
       - name: Docker drop test image
         run: docker rmi $APP_NAME
+
+      - name: Push to production branch
+        uses: Automattic/action-commit-to-branch@master
+        with:
+          branch: 'production'
+          commit_message: 'Automated tests for main.'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Required
