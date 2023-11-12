@@ -62,8 +62,11 @@ jobs:
         run: npm run test
 
       - name: 'Creating .env file'
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
         run: |
-          echo "${{ secrets.ENV_FILE }}" > .env
+          echo "$ENV_FILE" > .env
+        
 
       - name: Test building
         run: npm run build
