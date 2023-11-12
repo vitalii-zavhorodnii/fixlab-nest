@@ -9,7 +9,7 @@ RUN mkdir -p /app/
 WORKDIR /app/
 
 # copy env, config, package files
-COPY .env \ tsconfig.json \ package*.json \ nest-cli.json ./
+COPY .env* \ tsconfig.json \ package*.json \ nest-cli.json ./
 
 # install dependencies
 RUN npm install
