@@ -70,6 +70,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_SECRET_KEY }}
+          passphrase: ${{ secrets.SSH_PHRASE }}
           port: 22
           script: |
             cd ~/apps/$APP_NAME
