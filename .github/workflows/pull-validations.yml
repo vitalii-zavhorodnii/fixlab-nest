@@ -1,8 +1,6 @@
 name: Pre-prequest
 
 on:
-  push:
-    branches: ['main']
   pull_request:
     branches: ['main']
 
@@ -22,7 +20,7 @@ jobs:
 
     steps:
       - name: Check code base
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install ESLint
         run: |
@@ -49,7 +47,7 @@ jobs:
 
     steps:
       - name: Check code base
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install NodeJS 20.x
         uses: actions/setup-node@v3
@@ -72,8 +70,8 @@ jobs:
 
     steps:
       - name: Check code base
-        uses: actions/checkout@v3
-        
+        uses: actions/checkout@v4
+
       - name: Creating '.env' file
         shell: bash
         env:
