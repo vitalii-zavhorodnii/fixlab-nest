@@ -19,11 +19,8 @@ jobs:
       actions: read
 
     steps:
-      - name: Check repository
-        uses: actions/checkout@v2
-
-      - name: Check code base
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Install ESLint
         run: |
