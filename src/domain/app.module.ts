@@ -3,6 +3,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ServeStaticModule } from '@nestjs/serve-static';
 
+import configuration from '@config/configuration';
+
 import { ArticlesModule } from './articles/articles.module';
 import { AuthModule } from './auth/auth.module';
 import { BenefitsModule } from './benefits/benefits.module';
@@ -19,7 +21,11 @@ import { STATIC_FOLDER } from '@constants/routes.constants';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      envFilePath: ['.env', '.env.production'],
+      isGlobal: true,
+      load: [configuration]
+    }),
     ServeStaticModule.forRoot({
       rootPath: `${process.cwd()}/${STATIC_FOLDER}`
     }),
@@ -27,12 +33,8 @@ import { STATIC_FOLDER } from '@constants/routes.constants';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (config: ConfigService) => ({
-        uri: config.get<string>('MONGO_DB_LINK'),
-        dbName: config.get<string>('MONGO_DB_NAME'),
-        auth: {
-          username: config.get<string>('MONGO_DB_AUTH_USERNAME'),
-          password: config.get<string>('MONGO_DB_AUTH_PASSWORD')
-        }
+        uri: config.get<string>('database.link'),
+        dbName: config.get<string>('database.dbname')
       })
     }),
     TrpcModule,

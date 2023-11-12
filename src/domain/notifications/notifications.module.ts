@@ -13,17 +13,17 @@ import { NotificationsService } from './notifications.service';
       inject: [ConfigService],
       useFactory: async (config: ConfigService) => ({
         transport: {
-          host: config.get<string>('SMTP_DOMAIN'),
-          port: parseInt(config.get<string>('SMTP_PORT') || '465'),
+          host: config.get<string>('smtp.host'),
+          port: parseInt(config.get<string>('smtp.port') || '465'),
           ignoreTLS: false,
           secure: true,
           auth: {
-            user: config.get<string>('SMTP_USER'),
-            pass: config.get<string>('SMTP_PASSWORD')
+            user: config.get<string>('smtp.user'),
+            pass: config.get<string>('smtp.password')
           }
         },
         defaults: {
-          from: `"Fixlab" <${config.get<string>('SMTP_USER')}>`
+          from: `"Fixlab" <${config.get<string>('smtp.user')}>`
         },
         template: {
           dir: process.cwd() + '/templates/',

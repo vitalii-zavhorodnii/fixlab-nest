@@ -106,7 +106,7 @@ export class UsersService {
   }
 
   public async createFirstAdmin(key: string, dto: CreateUserDto): Promise<User> {
-    const originalKey = this.configService.get<string>('D_ADMIN_KEY');
+    const originalKey = this.configService.get<string>('app.initkey');
     const users = await this.userModel.find();
 
     if (users.length > 0 || key !== originalKey || !originalKey) {
