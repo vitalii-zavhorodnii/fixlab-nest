@@ -97,11 +97,12 @@ jobs:
       - name: Building application
         run: npm run build
 
-      - name: Push to Prod branch
-        uses: s0/git-publish-subdir-action@develop
+      - name: Push from dev to prod branch.
+        uses: Automattic/action-commit-to-branch@master
+        with:
+          dest_branch: 'main'
+          source_branch: 'production'
+          commit_message: 'Tested, lined and auto-merged with Production'
         env:
-          REPO: self
-          BRANCH: production 
-          MESSAGE: "Build: {msg} ({sha})"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Required
+
