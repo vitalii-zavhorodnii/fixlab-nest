@@ -17,6 +17,9 @@ import { UsersModule } from './users/users.module';
 
 import { STATIC_FOLDER } from '@constants/routes.constants';
 
+import { RouteInfo } from '@nestjs/common/interfaces';
+import { Router } from 'express';
+
 @Module({
   imports: [
     ConfigModule.forRoot(),
