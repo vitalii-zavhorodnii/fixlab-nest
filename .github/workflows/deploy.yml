@@ -27,4 +27,4 @@ jobs:
       - name: Deploy to VPS
         run: |
           scp -r ./dist/* ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}}:/apps/$APP_NAME
-          ssh ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}} 'cd /apps/$APP_NAME/src && node main'
+          ssh ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}} 'cd /apps/$APP_NAME/src && node'
