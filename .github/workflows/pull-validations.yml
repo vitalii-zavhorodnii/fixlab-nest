@@ -1,6 +1,8 @@
 name: Pre-merge
 
 on:
+  push:
+    branches: ['main']
   pull_request:
     branches: ['main']
 
@@ -61,13 +63,13 @@ jobs:
       - name: Running tests
         run: npm run test
 
-      - name: 'Creating .env file'
+      - name: Creating '.env' file
         shell: bash
         env:
           ENV_FILE: ${{ secrets.ENV_FILE }}
         run: |
           echo "$ENV_FILE" > .env
-        
+
       - name: Testing build
         run: npm run build
 
@@ -79,7 +81,7 @@ jobs:
       - name: Checking code
         uses: actions/checkout@v3
 
-      - name: 'Creating .env file'
+      - name: Creating '.env' file
         shell: bash
         env:
           ENV: ${{ secrets.ENV_FILE }}
