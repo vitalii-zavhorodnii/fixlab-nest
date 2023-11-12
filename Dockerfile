@@ -1,6 +1,8 @@
 # node required
-FROM node:18
+FROM node:18 as base
 
+# development settings
+FROM base as development 
 # create app directory
 RUN mkdir -p /app/
 WORKDIR /app/
