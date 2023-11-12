@@ -1,4 +1,4 @@
-name: Pre-merge Checks
+name: Pre-merge
 
 on:
   pull_request:
@@ -60,3 +60,14 @@ jobs:
 
       - name: Test building...
         run: npm run build
+
+  docker:
+    name: Build Docker
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checking code...
+        uses: actions/checkout@v3
+
+      - name: Build the Docker image
+        run: docker build . --no-cache -t backend-app
