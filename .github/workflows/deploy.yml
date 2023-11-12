@@ -67,9 +67,9 @@ jobs:
       - name: Deploying using SSH
         uses: appleboy/ssh-action@master
         with:
+          key: ${{ secrets.SSH_SECRET_KEY }}
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_SECRET_KEY }}
           port: 22
           script: |
             cd ~/apps/$APP_NAME
