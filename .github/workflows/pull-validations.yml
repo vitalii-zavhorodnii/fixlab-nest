@@ -1,4 +1,4 @@
-name: Pull Request validation
+name: Pre-merge Checks
 
 on:
   pull_request:
@@ -16,9 +16,6 @@ jobs:
       actions: read
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
       - name: Install ESLint
         run: |
           npm install eslint@latest
@@ -38,18 +35,15 @@ jobs:
           sarif_file: eslint-results.sarif
           wait-for-processing: true
 
-  test:
-    name: Pass unit-tests with Jest
+  node:
+    name: Install NodeJS
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [16.x, 18.x, 20.x]
 
     steps:
-      - name: Checking code...
-        uses: actions/checkout@v3
-
       - name: Installing NodeJS v${{ matrix.node-version }}...
         uses: actions/setup-node@v3
         with:
@@ -59,6 +53,14 @@ jobs:
       - name: Installing dependencies...
         run: npm ci
 
+  test:
+    name: Pass unit-tests with Jest
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checking code...
+        uses: actions/checkout@v3
+
       - name: Running tests...
         run: npm run test
 
@@ -66,17 +68,7 @@ jobs:
     name: Generate builds
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x]
-
     steps:
-      - name: Installing NodeJS v${{ matrix.node-version }}...
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-
       - name: Installing dependencies...
         run: npm ci
 
