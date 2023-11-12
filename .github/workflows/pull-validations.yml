@@ -8,7 +8,6 @@ on:
 
 env:
   APP_NAME: gs-backend
-    
 
 jobs:
   eslint:
@@ -62,8 +61,15 @@ jobs:
       - name: Running tests...
         run: npm run test
 
+      - name: 'Creating .env file...'
+        run: |
+          echo "${{ secrets.server }}" > .env
+
       - name: Test building...
         run: npm run build
+
+      - name: Running build...
+        run: npm run start:prod
 
   docker:
     name: Docker image test
@@ -72,6 +78,10 @@ jobs:
     steps:
       - name: Checking code...
         uses: actions/checkout@v3
+
+      - name: 'Creating .env file...'
+        run: |
+          echo "${{ secrets.server }}" > .env
 
       - name: Build Docker image...
         run: docker build . --no-cache -t $APP_NAME
