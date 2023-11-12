@@ -74,6 +74,7 @@ jobs:
             node -v  
             npm -v
             nvm -v
+            who
             cat ~
             cat ~/.ssh/authorized_keys
             cd /apps/gadget-shop/
