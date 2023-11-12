@@ -1,4 +1,4 @@
-name: Push build to production branch
+name: Update production branch
 
 on:
   pull_request:
@@ -11,8 +11,8 @@ env:
   APP_NAME: gs-backend
 
 jobs:
-  validate:
-    name: Push build to production branch
+  build:
+    name: Validate build and push
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -20,19 +20,13 @@ jobs:
       actions: read
 
     steps:
+      - name: Check repository
+        uses: actions/checkout@v2
+
       - name: Check code base
         uses: actions/checkout@v3
 
-      - name: Installing NodeJS
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20.x
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Prepare ESLint
+      - name: Install ESLint
         run: |
           npm install eslint@latest
           npm install @microsoft/eslint-formatter-sarif@latest
@@ -43,31 +37,40 @@ jobs:
           --ext .ts,.js,.tsx,.jsx
           --format @microsoft/eslint-formatter-sarif
           --output-file eslint-results.sarif
-        continue-on-error: true
+        continue-on-error: false
 
-      - name: Upload ESLint Analysis
-        uses: github/codeql-action/upload-sarif@v2
+      - name: Install NodeJS 20.x
+        uses: actions/setup-node@v3
         with:
-          sarif_file: eslint-results.sarif
-          wait-for-processing: true
+          node-version: 20.x
+          cache: 'npm'
 
-      - name: Running tests
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
         run: npm run test
 
-      - name: Create app build
+      - name: Create build
         run: npm run build
 
-      - name: Docker test image
+      - name: Create '.env' file
+        shell: bash
+        env:
+          ENV: ${{ secrets.ENV_FILE }}
+        run: |
+          echo "$ENV" > .env
+
+      - name: Docker test build image
         run: docker build . --no-cache -t $APP_NAME
 
-      - name: Docker delete image
+      - name: Docker drop test image
         run: docker rmi $APP_NAME
 
-      - name: Push from dev to prod branch.
+      - name: Push to production branch
         uses: Automattic/action-commit-to-branch@master
         with:
           branch: 'production'
-          commit_message: 'Tested, lined and auto-merged with Production'
+          commit_message: 'Automated tests for main.'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Required
-
