@@ -68,12 +68,8 @@ jobs:
         run: |
           echo "$ENV_FILE" > .env
         
-
-      - name: Test building
+      - name: Testing build
         run: npm run build
-
-      - name: Running build
-        run: npm run start:prod
 
   docker:
     name: Docker image test
