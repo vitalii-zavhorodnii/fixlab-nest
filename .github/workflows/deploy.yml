@@ -65,22 +65,23 @@ jobs:
 
       - name: Deploying using SSH
         uses: appleboy/ssh-action@master
+        env:
+          ENV: ${{ secrets.ENV_FILE }}
         with:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           username: ${{ secrets.SSH_USER }}
           host: ${{ secrets.SSH_HOST }}
           port: 22
           script: |
-            node -v  
-            npm -v
-            nvm -v
-            whoami
-            cat ~
-            cat ~/.ssh/authorized_keys
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+            export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm install latest
             cd /apps/gadget-shop/
             git status
             git checkout main
             git pull origin main
             npm install
+            echo "$ENV" > .env
             npm run build
             pm2 restart dist/src/main.js --name gadget-shop
