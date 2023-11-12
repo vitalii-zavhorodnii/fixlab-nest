@@ -73,11 +73,12 @@ jobs:
           port: 22
           script: |
             cd ~/apps/$APP_NAME
-            git pull origin main
             git status
+            git checkout main
+            git pull origin main
             npm install
             npm run build
-            pm2 start /dist/src/main.js --name $APP_NAME
+            pm2 restart dist/src/main.js --name $APP_NAME --watch
 
       # - name: Install dependencies and build
       #   run: |
