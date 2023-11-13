@@ -15,7 +15,7 @@ COPY .env* \ tsconfig.json \ package*.json \ nest-cli.json ./
 RUN npm install
 
 # Bundle app source
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 RUN npm run build
 
