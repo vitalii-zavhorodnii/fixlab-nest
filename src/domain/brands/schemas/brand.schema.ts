@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { Document, HydratedDocument, Types } from 'mongoose';
+import { Document, HydratedDocument, Schema as MongooseSchema } from 'mongoose';
 
 import { Image } from '@domain/images/schemas/image.schema';
 import { Metadata } from '@shared/schemas/metadata.schema';
@@ -38,8 +38,8 @@ class Brand extends Document {
   readonly metadata: Metadata;
 
   @ApiProperty({ type: Image })
-  @Prop({ type: Types.ObjectId, ref: Image.name })
-  readonly icon: Types.ObjectId;
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: Image.name })
+  readonly icon: Image;
 }
 
 const BrandSchema = SchemaFactory.createForClass(Brand);

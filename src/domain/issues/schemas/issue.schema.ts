@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { Document, HydratedDocument, Types } from 'mongoose';
+import { Document, HydratedDocument, Schema as MongooseSchema } from 'mongoose';
 
 import { Benefit } from '@domain/benefits/schemas/benefit.schema';
 import { Image } from '@domain/images/schemas/image.schema';
@@ -46,12 +46,12 @@ class Issue extends Document {
   readonly metadata: Metadata;
 
   @ApiProperty({ type: Image })
-  @Prop({ type: Types.ObjectId, ref: Image.name })
-  readonly image: Types.ObjectId;
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: Image.name })
+  readonly image: Image;
 
   @ApiProperty({ type: Benefit, isArray: true })
-  @Prop({ type: [{ type: Types.ObjectId, ref: Benefit.name }] })
-  readonly benefits: Array<Types.ObjectId>;
+  @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: Benefit.name }] })
+  readonly benefits: Array<Benefit>;
 }
 
 const IssueSchema = SchemaFactory.createForClass(Issue);

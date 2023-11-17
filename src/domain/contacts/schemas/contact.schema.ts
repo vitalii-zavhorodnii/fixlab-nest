@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { Document, HydratedDocument, Types } from 'mongoose';
+import { Document, HydratedDocument, Schema as MongooseSchema } from 'mongoose';
 
 import { Image } from '@domain/images/schemas/image.schema';
 
@@ -9,7 +9,7 @@ export type ContactDocument = HydratedDocument<Contact>;
 @Schema({ versionKey: false })
 class Contact extends Document {
   @ApiProperty({ example: '64ef4383e46e72721c03090e' })
-  readonly _id: Types.ObjectId;
+  readonly _id: string;
 
   @ApiProperty({ example: true })
   @Prop({ type: Boolean, default: false })
@@ -56,8 +56,8 @@ class Contact extends Document {
   readonly googlePluginLink: string;
 
   @ApiProperty({ type: Image })
-  @Prop({ type: Types.ObjectId, ref: Image.name, default: null })
-  readonly image: Types.ObjectId;
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: Image.name, default: null })
+  readonly image: Image;
 }
 
 const ContactSchema = SchemaFactory.createForClass(Contact);
